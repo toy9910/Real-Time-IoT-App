@@ -26,6 +26,7 @@ class LoginFragment : Fragment() {
 
     lateinit var mJsonString : String
     lateinit var pwd : String
+    lateinit var edit_password : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +48,7 @@ class LoginFragment : Fragment() {
 
             progressDialog?.dismiss()
 
-            Log.d(TAG, "response - $result")
+            Log.d(TAG, "POST response - $result")
 
             if(result == null)
                 Log.e(TAG,errorString)
@@ -59,7 +60,9 @@ class LoginFragment : Fragment() {
 
         override fun doInBackground(vararg params: String?): String? {
             val serverURL = params[0]
-            val postParameters = "room=" + params[1]
+            val user_id = params[1]
+            Log.d(TAG, "doInBackground: "+user_id)
+            val postParameters = "user_id=" + user_id
 
             try {
                 val url = URL(serverURL)
@@ -123,8 +126,10 @@ class LoginFragment : Fragment() {
                 pwd = item.getString(TAG_PWD)
             }
 
-            if(user_pwd.text.toString() == pwd)
+            if(edit_password == pwd) {
                 isTrue = true
+            }
+
 
             if(isTrue) {
                 var a = activity as MainActivity
@@ -132,9 +137,11 @@ class LoginFragment : Fragment() {
             }
             else {
                 Toast.makeText(activity,"비밀 번호가 다릅니다!",Toast.LENGTH_SHORT).show()
+                user_pwd.setText("")
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);
+            Toast.makeText(activity,"존재하지 않는 아이디입니다!",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -142,8 +149,11 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btn_login.setOnClickListener {
+            val usr_id = user_id.text.toString()
+            edit_password = user_pwd.text.toString()
             val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/user_getjson.php", "")
+            task.execute("http://" + IP_ADDRESS + "/user_getjson.php", usr_id)
+
         }
     }
 }
