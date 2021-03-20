@@ -1,0 +1,149 @@
+package com.example.dbwithfragment
+
+import android.app.ProgressDialog
+import android.os.AsyncTask
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_login.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
+import java.nio.charset.Charset
+
+class LoginFragment : Fragment() {
+    val IP_ADDRESS = "52.79.121.207"
+    val TAG = "phptest"
+
+    lateinit var mJsonString : String
+    lateinit var pwd : String
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+    inner class GetData : AsyncTask<String, Void, String>() {
+        var progressDialog : ProgressDialog? = null
+        lateinit var errorString : String
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressDialog = ProgressDialog.show(activity,"Please Wait",null,true,true)
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+
+            progressDialog?.dismiss()
+
+            Log.d(TAG, "response - $result")
+
+            if(result == null)
+                Log.e(TAG,errorString)
+            else {
+                mJsonString = result
+                showResult()
+            }
+        }
+
+        override fun doInBackground(vararg params: String?): String? {
+            val serverURL = params[0]
+            val postParameters = "room=" + params[1]
+
+            try {
+                val url = URL(serverURL)
+                val httpURLConnection = url.openConnection() as HttpURLConnection
+
+                httpURLConnection.readTimeout = 5000
+                httpURLConnection.connectTimeout = 5000
+                httpURLConnection.requestMethod = "POST"
+                httpURLConnection.doInput = true
+                httpURLConnection.connect()
+
+                val outputStream = httpURLConnection.outputStream
+                outputStream.write(postParameters?.toByteArray(Charset.defaultCharset()))
+                outputStream.flush()
+                outputStream.close()
+
+                val responseStatusCode = httpURLConnection.responseCode
+                Log.d(TAG, "response code - $responseStatusCode");
+
+                var inputStream : InputStream? = null
+                if(responseStatusCode == HttpURLConnection.HTTP_OK)
+                    inputStream = httpURLConnection.inputStream
+                else
+                    inputStream = httpURLConnection.errorStream
+
+                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                val sb = StringBuilder()
+                var line : String? = null
+
+                while(true) {
+                    line = bufferedReader.readLine()
+                    if(line != null)
+                        sb.append(line)
+                    else
+                        break
+                }
+                bufferedReader.close()
+                return sb.toString().trim()
+            } catch (e : Exception) {
+                Log.d(TAG, "GetData : Error ", e);
+                errorString = e.toString();
+                return null
+            }
+        }
+    }
+
+    fun showResult() {
+        val TAG_JSON = "joljak_dev"
+        val TAG_PWD = "pwd"
+
+        try {
+            var isTrue = false
+            val jsonObject = JSONObject(mJsonString)
+            val jsonArray = jsonObject.getJSONArray(TAG_JSON)
+
+            for(i in 0 until jsonArray.length()) {
+                val item = jsonArray.getJSONObject(i)
+
+                pwd = item.getString(TAG_PWD)
+            }
+
+            if(user_pwd.text.toString() == pwd)
+                isTrue = true
+
+            if(isTrue) {
+                var a = activity as MainActivity
+                a.replaceFragment(DataFragment())
+            }
+            else {
+                Toast.makeText(activity,"비밀 번호가 다릅니다!",Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: JSONException) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btn_login.setOnClickListener {
+            val task = GetData()
+            task.execute("http://" + IP_ADDRESS + "/user_getjson.php", "")
+        }
+    }
+}
