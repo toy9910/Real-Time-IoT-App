@@ -7,9 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.AdapterView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_login.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_one_data.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -20,32 +23,62 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
 
-class LoginFragment : Fragment() {
+class OneDataFragment : Fragment() {
     val IP_ADDRESS = "52.79.121.207"
     val TAG = "phptest"
 
     lateinit var mJsonString : String
-    lateinit var pwd : String
-    lateinit var edit_password : String
+
+    lateinit var spinner: Spinner
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    public fun newInstance() : DataFragment {
+        return DataFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        return inflater.inflate(R.layout.fragment_one_data, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        btn_login.setOnClickListener {
-            val usr_id = user_id.text.toString()
-            edit_password = user_pwd.text.toString()
-            val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/user_getjson.php", usr_id)
+        spinner = one_spinner
+        spinner.onItemSelectedListener = SpinnerListener()
+    }
 
+    inner class SpinnerListener : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            var pos2 = position
+            pos2 += 1
+            var str = pos2.toString()
+            val task = GetData()
+            task.execute("http://" + IP_ADDRESS + "/query.php", str)
         }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            TODO("Not yet implemented")
+        }
+    }
+
+    fun setButtons() {
+//        button_main_search.setOnClickListener {
+//            mArrayList.clear()
+//            mAdapter.notifyDataSetChanged()
+//
+//            val keyWord = editText_main_searchKeyword.text.toString()
+//            editText_main_searchKeyword.setText("")
+//
+//            val task = GetData()
+//            task.execute("http://" + IP_ADDRESS + "/query.php", keyWord)
+//        }
+
     }
 
     inner class GetData : AsyncTask<String, Void, String>() {
@@ -61,7 +94,7 @@ class LoginFragment : Fragment() {
 
             progressDialog?.dismiss()
 
-            Log.d(TAG, "POST response - $result")
+            Log.d(TAG, "response - $result")
 
             if(result == null)
                 Log.e(TAG,errorString)
@@ -73,10 +106,9 @@ class LoginFragment : Fragment() {
 
         override fun doInBackground(vararg params: String?): String? {
             val serverURL = params[0]
-            val user_id = params[1]
-            Log.d(TAG, "doInBackground: "+user_id)
-            val postParameters = "user_id=" + user_id
+            val postParameters = "room_no=" + params[1]
 
+            Log.d(TAG, "onItemSelected: $postParameters")
             try {
                 val url = URL(serverURL)
                 val httpURLConnection = url.openConnection() as HttpURLConnection
@@ -126,39 +158,33 @@ class LoginFragment : Fragment() {
 
     fun showResult() {
         val TAG_JSON = "joljak_dev"
-        val TAG_PWD = "pwd"
+        val TAG_TEMPERATURE ="temperature"
+        val TAG_HUMIDITY = "humidity"
+        val TAG_GAS = "gas"
+        val TAG_DUST = "dust"
+        val TAG_LIGHT = "light"
 
         try {
-            var isTrue = false
             val jsonObject = JSONObject(mJsonString)
             val jsonArray = jsonObject.getJSONArray(TAG_JSON)
 
             for(i in 0 until jsonArray.length()) {
                 val item = jsonArray.getJSONObject(i)
 
-                pwd = item.getString(TAG_PWD)
-            }
+                val temperature = item.getString(TAG_TEMPERATURE)
+                val humidity = item.getString(TAG_HUMIDITY)
+                val gas = item.getString(TAG_GAS)
+                val dust = item.getString(TAG_DUST)
+                val light = item.getString(TAG_LIGHT)
 
-            if(edit_password == pwd) {
-                isTrue = true
-            }
-
-
-            if(isTrue) {
-                var a = activity as MainActivity
-                a.replaceFragment(DataFragment())
-            }
-            else {
-                Toast.makeText(activity,"비밀 번호가 다릅니다!",Toast.LENGTH_SHORT).show()
-                user_pwd.setText("")
+                one_temp.text = temperature
+                one_humidity.text = humidity
+                one_gas.text = gas
+                one_dust.text = dust
+                one_led.text = light
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);
-            //Toast.makeText(activity,"존재하지 않는 아이디입니다!",Toast.LENGTH_SHORT).show()
-            var a = activity as MainActivity
-            a.replaceFragment(DataFragment())
         }
     }
-
-
 }

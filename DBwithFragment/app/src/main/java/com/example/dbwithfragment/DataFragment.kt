@@ -105,7 +105,7 @@ class DataFragment : Fragment() {
 
         override fun doInBackground(vararg params: String?): String? {
             val serverURL = params[0]
-            val postParameters = "room=" + params[1]
+            val postParameters = "room_no=" + params[1]
 
             try {
                 val url = URL(serverURL)
@@ -160,6 +160,7 @@ class DataFragment : Fragment() {
         val TAG_TEMPERATURE ="temperature"
         val TAG_HUMIDITY = "humidity"
         val TAG_GAS = "gas"
+        val TAG_DUST = "dust"
         val TAG_LIGHT = "light"
 
         try {
@@ -173,6 +174,7 @@ class DataFragment : Fragment() {
                 val temperature = item.getString(TAG_TEMPERATURE)
                 val humidity = item.getString(TAG_HUMIDITY)
                 val gas = item.getString(TAG_GAS)
+                val dust = item.getString(TAG_DUST)
                 val light = item.getString(TAG_LIGHT)
 
                 val roomData = RoomData()
@@ -180,6 +182,7 @@ class DataFragment : Fragment() {
                 roomData.room_temperature = temperature
                 roomData.room_humidity = humidity
                 roomData.room_gas = gas
+                roomData.room_dust = dust
                 roomData.room_light = light
                 mArrayList.add(roomData)
                 mAdapter.notifyDataSetChanged()

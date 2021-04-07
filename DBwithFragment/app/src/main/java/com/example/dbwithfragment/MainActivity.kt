@@ -4,17 +4,12 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_content.*
@@ -50,7 +45,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menu_change_pwd -> {
                 getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, PwdFragment())
+                    .replace(R.id.container, ChangeFragment())
+                    .commit()
+            }
+            R.id.menu_get_one_data -> {
+                getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, OneDataFragment())
                     .commit()
             }
         }

@@ -32,6 +32,7 @@ class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textView_room_temp.text = personalData.room_temperature
         itemView.textView_room_hum.text = personalData.room_humidity
         itemView.textView_room_gas.text = personalData.room_gas
+        itemView.textView_room_dust.text = personalData.room_dust
         itemView.textView_room_light.text = personalData.room_light
     }
 }
