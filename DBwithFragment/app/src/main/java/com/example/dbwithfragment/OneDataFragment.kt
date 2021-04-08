@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.SeekBar
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -51,6 +52,22 @@ class OneDataFragment : Fragment() {
 
         spinner = one_spinner
         spinner.onItemSelectedListener = SpinnerListener()
+
+
+        // seekbar 현재 디비값 보내는거
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                one_led.text = "$progress"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                one_led.text = "${seekBar!!.progress}"
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                one_led.text = "${seekBar!!.progress}"
+            }
+        })
     }
 
     inner class SpinnerListener : AdapterView.OnItemSelectedListener {
@@ -182,6 +199,7 @@ class OneDataFragment : Fragment() {
                 one_gas.text = gas
                 one_dust.text = dust
                 one_led.text = light
+                seekBar.progress = light.toInt()
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);
