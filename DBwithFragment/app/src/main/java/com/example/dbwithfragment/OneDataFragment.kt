@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.SeekBar
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_insert.*
 import kotlinx.android.synthetic.main.fragment_one_data.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -27,7 +29,7 @@ class OneDataFragment : Fragment() {
     val IP_ADDRESS = "52.79.121.207"
     val TAG = "phptest"
 
-    lateinit var mJsonString : String
+    lateinit var mJsonString: String
 
     lateinit var spinner: Spinner
 
@@ -35,13 +37,13 @@ class OneDataFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    public fun newInstance() : DataFragment {
+    public fun newInstance(): DataFragment {
         return DataFragment()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_one_data, container, false)
     }
@@ -51,6 +53,98 @@ class OneDataFragment : Fragment() {
 
         spinner = one_spinner
         spinner.onItemSelectedListener = SpinnerListener()
+
+
+        // seekbar 현재 디비값 보내는거
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                one_led.text = "$progress"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                one_led.text = "${seekBar!!.progress}"
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                one_led.text = "${seekBar!!.progress}"
+
+                //현재 어떤 방인지, 빛의 밝기를 데이터 보내는과정
+                val room_num = (one_spinner.selectedItemPosition + 1).toString()
+                val light = one_led.text.toString()
+
+                val task = InsertData()
+                task.execute("http://" + IP_ADDRESS + "/insert.php", room_num, light)
+            }
+        })
+    }
+
+    //데이터값 보내기
+    inner class InsertData : AsyncTask<String, Void, String>() {
+        lateinit var progressDialog: ProgressDialog
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressDialog = ProgressDialog.show(activity, "Please Wait", null, true, true)
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            progressDialog.dismiss()
+            Log.d(TAG, "POST response  - $result")
+        }
+
+        override fun doInBackground(vararg params: String?): String {
+            val room_no = params[1]
+            val light = params[2]
+
+            val serverURL = params[0]
+            val postParameters = "room_no=" + room_no + "&light=" + light
+
+            try {
+                val url = URL(serverURL)
+                val httpURLConnection = url.openConnection() as HttpURLConnection
+
+                httpURLConnection.readTimeout = 5000
+                httpURLConnection.connectTimeout = 5000
+                httpURLConnection.requestMethod = "POST"
+                httpURLConnection.connect()
+
+                val outputStream = httpURLConnection.outputStream
+                outputStream.write(postParameters.toByteArray(Charset.defaultCharset()))
+                outputStream.flush()
+                outputStream.close()
+
+                val responseStatusCode = httpURLConnection.responseCode
+                Log.d(TAG, "POST response code - $responseStatusCode");
+
+                var inputStream: InputStream? = null
+                if (responseStatusCode == HttpURLConnection.HTTP_OK)
+                    inputStream = httpURLConnection.inputStream
+                else
+                    inputStream = httpURLConnection.errorStream
+
+
+                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                val sb = StringBuilder()
+                var line: String? = null
+
+                while (true) {
+                    line = bufferedReader.readLine()
+                    if (line != null)
+                        sb.append(line)
+                    else
+                        break
+                }
+
+                bufferedReader.close()
+                return sb.toString()
+            } catch (e: Exception) {
+                Log.d(TAG, "InsertData: Error ", e);
+                val message = "Error: " + e.message
+                return message
+            }
+        }
     }
 
     inner class SpinnerListener : AdapterView.OnItemSelectedListener {
@@ -82,11 +176,11 @@ class OneDataFragment : Fragment() {
     }
 
     inner class GetData : AsyncTask<String, Void, String>() {
-        var progressDialog : ProgressDialog? = null
-        lateinit var errorString : String
+        var progressDialog: ProgressDialog? = null
+        lateinit var errorString: String
         override fun onPreExecute() {
             super.onPreExecute()
-            progressDialog = ProgressDialog.show(activity,"Please Wait",null,true,true)
+            progressDialog = ProgressDialog.show(activity, "Please Wait", null, true, true)
         }
 
         override fun onPostExecute(result: String?) {
@@ -96,8 +190,8 @@ class OneDataFragment : Fragment() {
 
             Log.d(TAG, "response - $result")
 
-            if(result == null)
-                Log.e(TAG,errorString)
+            if (result == null)
+                Log.e(TAG, errorString)
             else {
                 mJsonString = result
                 showResult()
@@ -127,8 +221,8 @@ class OneDataFragment : Fragment() {
                 val responseStatusCode = httpURLConnection.responseCode
                 Log.d(TAG, "response code - $responseStatusCode");
 
-                var inputStream : InputStream? = null
-                if(responseStatusCode == HttpURLConnection.HTTP_OK)
+                var inputStream: InputStream? = null
+                if (responseStatusCode == HttpURLConnection.HTTP_OK)
                     inputStream = httpURLConnection.inputStream
                 else
                     inputStream = httpURLConnection.errorStream
@@ -137,18 +231,18 @@ class OneDataFragment : Fragment() {
                 val bufferedReader = BufferedReader(inputStreamReader)
 
                 val sb = StringBuilder()
-                var line : String? = null
+                var line: String? = null
 
-                while(true) {
+                while (true) {
                     line = bufferedReader.readLine()
-                    if(line != null)
+                    if (line != null)
                         sb.append(line)
                     else
                         break
                 }
                 bufferedReader.close()
                 return sb.toString().trim()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Log.d(TAG, "GetData : Error ", e);
                 errorString = e.toString();
                 return null
@@ -158,7 +252,7 @@ class OneDataFragment : Fragment() {
 
     fun showResult() {
         val TAG_JSON = "joljak_dev"
-        val TAG_TEMPERATURE ="temperature"
+        val TAG_TEMPERATURE = "temperature"
         val TAG_HUMIDITY = "humidity"
         val TAG_GAS = "gas"
         val TAG_DUST = "dust"
@@ -168,7 +262,7 @@ class OneDataFragment : Fragment() {
             val jsonObject = JSONObject(mJsonString)
             val jsonArray = jsonObject.getJSONArray(TAG_JSON)
 
-            for(i in 0 until jsonArray.length()) {
+            for (i in 0 until jsonArray.length()) {
                 val item = jsonArray.getJSONObject(i)
 
                 val temperature = item.getString(TAG_TEMPERATURE)
@@ -182,6 +276,7 @@ class OneDataFragment : Fragment() {
                 one_gas.text = gas
                 one_dust.text = dust
                 one_led.text = light
+                seekBar.progress = light.toInt()
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);
