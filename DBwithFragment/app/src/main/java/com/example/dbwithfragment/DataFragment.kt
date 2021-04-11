@@ -21,6 +21,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
 
+// 방 전체 조회
 class DataFragment : Fragment() {
     val IP_ADDRESS = "52.79.121.207"
     val TAG = "phptest"
