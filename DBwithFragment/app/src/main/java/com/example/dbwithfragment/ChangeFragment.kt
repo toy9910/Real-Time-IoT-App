@@ -36,6 +36,7 @@ class ChangeFragment : Fragment() {
             val user_id_str = user_id.text.toString()
             val user_pw_str = user_password.text.toString()
 
+
             if(user_id_str.isEmpty() || user_pw_str.isEmpty())
                 Toast.makeText(view.context,"아이디와 비밀번호를 모두 입력하세요.",Toast.LENGTH_SHORT).show()
             else {

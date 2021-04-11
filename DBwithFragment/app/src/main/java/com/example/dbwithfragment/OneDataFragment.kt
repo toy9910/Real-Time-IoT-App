@@ -152,6 +152,7 @@ class OneDataFragment : Fragment() {
             var pos2 = position
             pos2 += 1
             var str = pos2.toString()
+
             val task = GetData()
             task.execute("http://" + IP_ADDRESS + "/query.php", str)
         }

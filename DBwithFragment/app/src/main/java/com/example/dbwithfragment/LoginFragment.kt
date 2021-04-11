@@ -154,9 +154,7 @@ class LoginFragment : Fragment() {
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);
-            //Toast.makeText(activity,"존재하지 않는 아이디입니다!",Toast.LENGTH_SHORT).show()
-            var a = activity as MainActivity
-            a.replaceFragment(DataFragment())
+            Toast.makeText(activity,"존재하지 않는 아이디입니다!",Toast.LENGTH_SHORT).show()
         }
     }
 
