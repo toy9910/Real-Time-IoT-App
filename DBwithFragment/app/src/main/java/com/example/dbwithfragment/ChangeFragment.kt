@@ -21,7 +21,7 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-
+// 수정 완료
 class ChangeFragment : Fragment() {
     val IP_ADDRESS = "3.35.105.27"
     val TAG = "phptest"
