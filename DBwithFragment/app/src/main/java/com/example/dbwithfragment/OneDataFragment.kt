@@ -27,7 +27,7 @@ import java.nio.charset.Charset
 
 // 방별 조회
 class OneDataFragment : Fragment() {
-    val IP_ADDRESS = "52.79.121.207"
+    val IP_ADDRESS = "3.35.105.27"
     val TAG = "phptest"
 
     lateinit var mJsonString: String

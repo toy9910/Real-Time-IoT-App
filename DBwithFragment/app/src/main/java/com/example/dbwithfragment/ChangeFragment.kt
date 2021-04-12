@@ -1,15 +1,19 @@
 package com.example.dbwithfragment
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_change.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -19,7 +23,7 @@ import java.net.URL
 import java.nio.charset.Charset
 
 class ChangeFragment : Fragment() {
-    val IP_ADDRESS = "52.79.121.207"
+    val IP_ADDRESS = "3.35.105.27"
     val TAG = "phptest"
 
     override fun onCreateView(
@@ -32,6 +36,8 @@ class ChangeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         btn_change.setOnClickListener {
             val user_id_str = user_id.text.toString()
             val user_pw_str = user_password.text.toString()

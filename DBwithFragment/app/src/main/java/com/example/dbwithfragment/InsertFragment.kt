@@ -18,7 +18,7 @@ import java.net.URL
 import java.nio.charset.Charset
 
 class InsertFragment : Fragment() {
-    val IP_ADDRESS = "52.79.121.207"
+    val IP_ADDRESS = "3.35.105.27"
     val TAG = "phptest"
 
     override fun onCreate(savedInstanceState: Bundle?) {
