@@ -1,13 +1,17 @@
 package com.example.dbwithfragment
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
@@ -21,7 +25,7 @@ import java.net.URL
 import java.nio.charset.Charset
 
 class LoginFragment : Fragment() {
-    val IP_ADDRESS = "52.79.121.207"
+    val IP_ADDRESS = "3.35.105.27"
     val TAG = "phptest"
 
     lateinit var mJsonString : String
@@ -39,12 +43,24 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        user_pwd.setOnEditorActionListener{ textView, action, event ->
+            var handled = false
+
+            if (action == EditorInfo.IME_ACTION_DONE) {
+                // 키보드 내리기
+                val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(user_pwd.windowToken, 0)
+                handled = true
+            }
+
+            handled
+        }
+
         btn_login.setOnClickListener {
             val usr_id = user_id.text.toString()
             edit_password = user_pwd.text.toString()
             val task = GetData()
             task.execute("http://" + IP_ADDRESS + "/user_getjson.php", usr_id)
-
         }
     }
 
@@ -149,14 +165,13 @@ class LoginFragment : Fragment() {
                 a.replaceFragment(DataFragment())
             }
             else {
-                Toast.makeText(activity,"비밀 번호가 다릅니다!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"비밀 번호가 다릅니다!",Toast.LENGTH_SHORT).show()
                 user_pwd.setText("")
+                Log.d(TAG, "비밀번호 틀림");
             }
         } catch (e: JSONException) {
-            Log.d(TAG, "showResult : ", e);
-            Toast.makeText(activity,"존재하지 않는 아이디입니다!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "아이디가 다릅니다!",Toast.LENGTH_LONG).show()
+            Log.d(TAG, "아이디가 없음");
         }
     }
-
-
 }
