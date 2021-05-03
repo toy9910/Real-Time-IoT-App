@@ -273,10 +273,10 @@ class OneDataFragment : Fragment() {
                 val dust = item.getString(TAG_DUST)
                 val light = item.getString(TAG_LIGHT)
 
-                one_temp.text = temperature
-                one_humidity.text = humidity
+                one_temp.text = temperature + "°C"
+                one_humidity.text = humidity + "%"
                 one_gas.text = gas
-                one_dust.text = dust
+                one_dust.text = dust + "μg/m"
                 one_led.text = light
                 seekBar.progress = light.toInt()
             }

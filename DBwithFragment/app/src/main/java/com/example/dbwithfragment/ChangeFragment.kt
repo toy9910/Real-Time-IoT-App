@@ -21,7 +21,7 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-// 수정 완료
+
 class ChangeFragment : Fragment() {
     val IP_ADDRESS = "3.35.105.27"
     val TAG = "phptest"
@@ -38,8 +38,9 @@ class ChangeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         btn_change.setOnClickListener {
-            val user_id_str = user_id.text.toString()
+            val user_id_str = user_change_id.text.toString()
             val user_pw_str = user_password.text.toString()
 
 
@@ -49,9 +50,10 @@ class ChangeFragment : Fragment() {
                 val task = InsertData()
                 task.execute("http://" + IP_ADDRESS + "/user_change.php", user_id_str, user_pw_str)
             }
-            user_id.setText("")
+            user_change_id.setText("")
             user_password.setText("")
         }
+
     }
 
     inner class InsertData : AsyncTask<String, Void, String>() {

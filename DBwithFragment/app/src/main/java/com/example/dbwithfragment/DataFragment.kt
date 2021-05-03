@@ -52,32 +52,19 @@ class DataFragment : Fragment() {
 
         listView_main_list.layoutManager = LinearLayoutManager(activity)
         listView_main_list.adapter = mAdapter
+        listView_main_list.addItemDecoration(DividerItemDecoration(view.context,1))
 
         val dividerItemDecoration = DividerItemDecoration(activity, LinearLayoutManager(activity).orientation)
         listView_main_list.addItemDecoration(dividerItemDecoration)
 
-        setButtons()
+        mArrayList.clear()
+        mAdapter.notifyDataSetChanged()
+
+        val task = GetData()
+        task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
     }
 
-    fun setButtons() {
-        button_main_search.setOnClickListener {
-            mArrayList.clear()
-            mAdapter.notifyDataSetChanged()
 
-            val keyWord = editText_main_searchKeyword.text.toString()
-            editText_main_searchKeyword.setText("")
-
-            val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/query.php", keyWord)
-        }
-        button_main_all.setOnClickListener {
-            mArrayList.clear()
-            mAdapter.notifyDataSetChanged()
-
-            val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
-        }
-    }
 
     inner class GetData : AsyncTask<String, Void, String>() {
         var progressDialog : ProgressDialog? = null
@@ -158,6 +145,7 @@ class DataFragment : Fragment() {
     fun showResult() {
         val TAG_JSON = "joljak_dev"
         val TAG_ID = "room_no"
+        val TAG_NAME = "room_name"
         val TAG_TEMPERATURE ="temperature"
         val TAG_HUMIDITY = "humidity"
         val TAG_GAS = "gas"
@@ -172,6 +160,7 @@ class DataFragment : Fragment() {
                 val item = jsonArray.getJSONObject(i)
 
                 val id = item.getString(TAG_ID)
+                val name = item.getString(TAG_NAME)
                 val temperature = item.getString(TAG_TEMPERATURE)
                 val humidity = item.getString(TAG_HUMIDITY)
                 val gas = item.getString(TAG_GAS)
@@ -180,10 +169,11 @@ class DataFragment : Fragment() {
 
                 val roomData = RoomData()
                 roomData.room_no = id
-                roomData.room_temperature = temperature
-                roomData.room_humidity = humidity
+                roomData.room_name = name
+                roomData.room_temperature = temperature + "°C"
+                roomData.room_humidity = humidity + "%"
                 roomData.room_gas = gas
-                roomData.room_dust = dust
+                roomData.room_dust = dust + "μg/m"
                 roomData.room_light = light
                 mArrayList.add(roomData)
                 mAdapter.notifyDataSetChanged()
