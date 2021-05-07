@@ -2,16 +2,19 @@ package com.example.dbwithfragment
 
 import android.app.ProgressDialog
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_data.*
+import kotlinx.android.synthetic.main.item_list.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -184,4 +187,5 @@ class DataFragment : Fragment() {
             Log.d(TAG, "showResult : ", e);
         }
     }
+
 }

@@ -1,9 +1,13 @@
 package com.example.dbwithfragment
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.item_list.*
 import kotlinx.android.synthetic.main.item_list.view.*
 
 class RoomAdapter(list: ArrayList<RoomData>) : RecyclerView.Adapter<CustomViewHolder>() {
@@ -35,5 +39,19 @@ class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textView_room_gas.text = personalData.room_gas
         itemView.textView_room_dust.text = personalData.room_dust
         itemView.textView_room_light.text = personalData.room_light
+
+        val tv_background = itemView.textView_room_dust.background as GradientDrawable
+
+        when(personalData.room_dust.toInt()) {
+            in 0..49 ->  {
+                tv_background.setColor(Color.parseColor("#08E100"))
+            }
+            in 50..69 ->  {
+                tv_background.setColor(Color.parseColor("#F5A623"))
+            }
+            in 70..100 ->  {
+                tv_background.setColor(Color.parseColor("#D93218"))
+            }
+        }
     }
 }
