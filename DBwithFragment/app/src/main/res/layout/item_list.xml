@@ -3,64 +3,78 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
-    android:layout_margin="5dp"
     android:padding="5dp">
 
     <TextView
         android:id="@+id/textView_room_no"
         android:layout_width="55dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:gravity="center_horizontal"
+        android:layout_marginVertical="5dp"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:textColor="#E9FFFFFF" />
 
     <TextView
         android:id="@+id/textView_room_nm"
-        android:gravity="center_horizontal"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="#E9FFFFFF" />
 
 
     <TextView
         android:id="@+id/textView_room_temp"
-        android:gravity="center_horizontal"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#E9FFFFFF" />
 
 
     <TextView
         android:id="@+id/textView_room_hum"
-        android:gravity="center_horizontal"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#E9FFFFFF" />
 
     <TextView
         android:id="@+id/textView_room_gas"
-        android:gravity="center_horizontal"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#E9FFFFFF" />
 
     <TextView
         android:id="@+id/textView_room_dust"
-        android:gravity="center_horizontal"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#E9FFFFFF" />
 
     <TextView
         android:id="@+id/textView_room_light"
-        android:gravity="center_horizontal"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5dp" />
+        android:layout_marginVertical="5dp"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#E9FFFFFF" />
 
 </LinearLayout>

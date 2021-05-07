@@ -1,6 +1,7 @@
 package com.example.dbwithfragment
 
 import android.app.ProgressDialog
+import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +14,6 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_insert.*
 import kotlinx.android.synthetic.main.fragment_one_data.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -51,6 +51,7 @@ class OneDataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        one_back.setBackgroundColor(Color.GRAY)
 
         spinner = one_spinner
         spinner.onItemSelectedListener = SpinnerListener()

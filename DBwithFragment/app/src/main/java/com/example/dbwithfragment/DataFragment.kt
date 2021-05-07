@@ -1,6 +1,7 @@
 package com.example.dbwithfragment
 
 import android.app.ProgressDialog
+import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -49,35 +50,23 @@ class DataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mArrayList = arrayListOf<RoomData>()
         mAdapter = RoomAdapter(mArrayList)
+        back.setBackgroundColor(Color.GRAY)
 
+        listView_main_list.setBackgroundColor(Color.GRAY)
         listView_main_list.layoutManager = LinearLayoutManager(activity)
         listView_main_list.adapter = mAdapter
 
         val dividerItemDecoration = DividerItemDecoration(activity, LinearLayoutManager(activity).orientation)
         listView_main_list.addItemDecoration(dividerItemDecoration)
 
-        setButtons()
+        mArrayList.clear()
+        mAdapter.notifyDataSetChanged()
+
+        val task = GetData()
+        task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
     }
 
-    fun setButtons() {
-        button_main_search.setOnClickListener {
-            mArrayList.clear()
-            mAdapter.notifyDataSetChanged()
 
-            val keyWord = editText_main_searchKeyword.text.toString()
-            editText_main_searchKeyword.setText("")
-
-            val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/query.php", keyWord)
-        }
-        button_main_all.setOnClickListener {
-            mArrayList.clear()
-            mAdapter.notifyDataSetChanged()
-
-            val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
-        }
-    }
 
     inner class GetData : AsyncTask<String, Void, String>() {
         var progressDialog : ProgressDialog? = null

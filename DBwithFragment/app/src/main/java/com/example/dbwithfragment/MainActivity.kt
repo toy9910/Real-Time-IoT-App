@@ -38,11 +38,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         .replace(R.id.container, DataFragment())
                         .commit()
             }
-            R.id.menu_insert_data -> {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, InsertFragment())
-                        .commit()
-            }
             R.id.menu_change_pwd -> {
                 getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, ChangeFragment())

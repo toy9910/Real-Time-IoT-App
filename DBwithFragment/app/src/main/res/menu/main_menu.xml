@@ -14,8 +14,4 @@
         android:id="@+id/menu_change_pwd"
         android:icon="@drawable/ic_baseline_accessibility_24"
         android:title="계정 설정" />
-    <item
-        android:id="@+id/menu_insert_data"
-        android:icon="@drawable/ic_baseline_post_add_24"
-        android:title="데이터 입력하기" />
 </menu>
