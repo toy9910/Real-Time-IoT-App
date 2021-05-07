@@ -158,6 +158,7 @@ class DataFragment : Fragment() {
     fun showResult() {
         val TAG_JSON = "joljak_dev"
         val TAG_ID = "room_no"
+        val TAG_NAME = "room_nm"
         val TAG_TEMPERATURE ="temperature"
         val TAG_HUMIDITY = "humidity"
         val TAG_GAS = "gas"
@@ -172,6 +173,7 @@ class DataFragment : Fragment() {
                 val item = jsonArray.getJSONObject(i)
 
                 val id = item.getString(TAG_ID)
+                val name = item.getString(TAG_NAME)
                 val temperature = item.getString(TAG_TEMPERATURE)
                 val humidity = item.getString(TAG_HUMIDITY)
                 val gas = item.getString(TAG_GAS)
@@ -180,6 +182,7 @@ class DataFragment : Fragment() {
 
                 val roomData = RoomData()
                 roomData.room_no = id
+                roomData.room_nm = name
                 roomData.room_temperature = temperature
                 roomData.room_humidity = humidity
                 roomData.room_gas = gas

@@ -48,7 +48,7 @@
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-03-17T03:57:27.561Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/AndroidStudioProjects/DBwithFragment" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -136,7 +136,6 @@
     <state x="720" y="214" key="#com.intellij.ide.util.MemberChooser" timestamp="1612502614424">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="720" y="214" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1610504004495" />
     <state x="720" y="214" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1612502614424" />
     <state x="696" y="313" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1612501347862">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -150,23 +149,15 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="654" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1616131030118" />
-    <state x="693" y="273" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1610453855298">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="693" y="273" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1610453855298" />
-    <state x="510" y="253" key="AndroidCreateResourceDirectoryDialog" timestamp="1610460695533">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="510" y="253" key="AndroidCreateResourceDirectoryDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1610460695533" />
     <state x="510" y="253" key="AndroidCreateResourceFileDialog" timestamp="1616131424571">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="510" y="253" key="AndroidCreateResourceFileDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1610502656953" />
     <state x="510" y="253" key="AndroidCreateResourceFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1616131424571" />
-    <state x="710" y="167" width="440" height="802" key="FileChooserDialogImpl" timestamp="1616222453254">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2630" y="167" width="440" height="802" key="FileChooserDialogImpl" timestamp="1619864242370">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="710" y="167" width="440" height="802" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1615954626914" />
+    <state x="2630" y="167" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1619864242370" />
     <state x="710" y="167" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616222453254" />
     <state width="1449" height="290" key="GridCell.Tab.0.bottom" timestamp="1615961070134">
       <screen x="0" y="0" width="1920" height="1040" />

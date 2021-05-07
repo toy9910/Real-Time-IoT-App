@@ -29,6 +29,7 @@ class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun setHolder(personalData: RoomData) {
         itemView.textView_room_no.text = personalData.room_no
+        itemView.textView_room_nm.text = personalData.room_nm
         itemView.textView_room_temp.text = personalData.room_temperature
         itemView.textView_room_hum.text = personalData.room_humidity
         itemView.textView_room_gas.text = personalData.room_gas

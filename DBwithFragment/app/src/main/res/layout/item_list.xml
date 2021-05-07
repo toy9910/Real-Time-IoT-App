@@ -8,7 +8,15 @@
 
     <TextView
         android:id="@+id/textView_room_no"
-        android:layout_width="wrap_content"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="5dp" />
+
+    <TextView
+        android:id="@+id/textView_room_nm"
+        android:gravity="center_horizontal"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp" />
@@ -16,7 +24,8 @@
 
     <TextView
         android:id="@+id/textView_room_temp"
-        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp" />
@@ -24,28 +33,32 @@
 
     <TextView
         android:id="@+id/textView_room_hum"
-        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp" />
 
     <TextView
         android:id="@+id/textView_room_gas"
-        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp" />
 
     <TextView
         android:id="@+id/textView_room_dust"
-        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp" />
 
     <TextView
         android:id="@+id/textView_room_light"
-        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp" />
