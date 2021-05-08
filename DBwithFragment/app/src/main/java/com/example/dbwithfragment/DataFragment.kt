@@ -53,9 +53,9 @@ class DataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mArrayList = arrayListOf<RoomData>()
         mAdapter = RoomAdapter(mArrayList)
-        back.setBackgroundColor(Color.GRAY)
+        back.setBackgroundColor(Color.parseColor("#D0BFFF"))
 
-        listView_main_list.setBackgroundColor(Color.GRAY)
+//        listView_main_list.setBackgroundColor(Color.parseColor("#86A6F8"))
         listView_main_list.layoutManager = LinearLayoutManager(activity)
         listView_main_list.adapter = mAdapter
 
