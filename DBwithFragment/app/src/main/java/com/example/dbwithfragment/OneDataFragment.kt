@@ -51,7 +51,7 @@ class OneDataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        one_back.setBackgroundColor(Color.parseColor("#D0BFFF"))
+        //one_back.setBackgroundColor(Color.parseColor("#D0BFFF"))
 
         spinner = one_spinner
         spinner.onItemSelectedListener = SpinnerListener()

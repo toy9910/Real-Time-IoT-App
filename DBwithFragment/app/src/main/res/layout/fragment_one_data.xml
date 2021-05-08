@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/one_back"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/gradient">
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/one_spinner"
@@ -22,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_marginLeft="25dp"
+            android:background="@drawable/one_date_border"
             android:orientation="vertical">
 
             <TextView
