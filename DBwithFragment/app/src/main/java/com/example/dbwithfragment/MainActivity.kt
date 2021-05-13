@@ -1,9 +1,11 @@
 package com.example.dbwithfragment
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -29,6 +31,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
         })
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intent = intent
+
+        Log.d("joljak", "onResume: ")
+        if(intent.action == "NOTI"){Log.d("joljak", "onResume: NOTI")
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, DataFragment())
+                    .commit()
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

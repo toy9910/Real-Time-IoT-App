@@ -105,4 +105,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView_main_list" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="18dp"
+        android:text="파이어베이스 데이터"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginHorizontal="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView_fb_list" />
+
 </LinearLayout>

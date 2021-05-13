@@ -13,6 +13,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.database.*
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import kotlinx.android.synthetic.main.fragment_data.*
 import kotlinx.android.synthetic.main.item_list.*
 import org.json.JSONException
@@ -28,11 +33,16 @@ import java.nio.charset.Charset
 // 방 전체 조회
 class DataFragment : Fragment() {
     val IP_ADDRESS = "3.35.105.27"
-    val TAG = "phptest"
+    val TAG = "joljak"
+
+    lateinit var firebaseDatabase: FirebaseDatabase
+    lateinit var databaseReference: DatabaseReference
 
     lateinit var mJsonString : String
     lateinit var mArrayList : ArrayList<RoomData>
+    lateinit var mArrayList2 : ArrayList<RoomData>
     lateinit var mAdapter: RoomAdapter
+    lateinit var mAdapter2: FbAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +62,18 @@ class DataFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mArrayList = arrayListOf<RoomData>()
+        mArrayList2 = arrayListOf<RoomData>()
         mAdapter = RoomAdapter(mArrayList)
+        mAdapter2 = FbAdapter(mArrayList2)
         back.setBackgroundColor(Color.parseColor("#D0BFFF"))
 
 //        listView_main_list.setBackgroundColor(Color.parseColor("#86A6F8"))
         listView_main_list.layoutManager = LinearLayoutManager(activity)
         listView_main_list.adapter = mAdapter
+
+
+        listView_fb_list.layoutManager = LinearLayoutManager(activity)
+        listView_fb_list.adapter = mAdapter2
 
         val dividerItemDecoration = DividerItemDecoration(activity, LinearLayoutManager(activity).orientation)
         listView_main_list.addItemDecoration(dividerItemDecoration)
@@ -65,8 +81,66 @@ class DataFragment : Fragment() {
         mArrayList.clear()
         mAdapter.notifyDataSetChanged()
 
+        mArrayList2.clear()
+        mAdapter2.notifyDataSetChanged()
+
+        initDatabase()
+
         val task = GetData()
         task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
+
+        databaseReference.orderByChild("room_no").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                mArrayList.clear()
+                for(shot in snapshot.children) {
+                    var room_no = ""
+                    var room_nm = ""
+                    var temp = ""
+                    var hum = ""
+                    var gas = ""
+                    var dust = ""
+                    var light = ""
+                    for (shot2 in shot.children) {
+                        when(shot2.key) {
+                            "room_no" -> {
+                                room_no = shot2.value.toString()
+                            }
+                            "room_nm" -> {
+                                room_nm = shot2.value.toString()
+                            }
+                            "temp" -> {
+                                temp = shot2.value.toString()
+                            }
+                            "hum" -> {
+                                hum = shot2.value.toString()
+                            }
+                            "gas" -> {
+                                gas = shot2.value.toString()
+                            }
+                            "dust" -> {
+                                dust = shot2.value.toString()
+                            }
+                            "light" -> {
+                                light = shot2.value.toString()
+                            }
+                        }
+                    }
+                    val p = RoomData()
+                    p.room_no=room_no
+                    p.room_nm=room_nm
+                    p.room_temperature=temp
+                    p.room_humidity=hum
+                    p.room_gas=gas
+                    p.room_dust=dust
+                    p.room_light=light
+                    mArrayList2.add(p)
+                }
+                mAdapter2.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 
@@ -188,4 +262,44 @@ class DataFragment : Fragment() {
         }
     }
 
+    fun initDatabase() {
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        databaseReference = firebaseDatabase.getReference("Rooms")
+
+        databaseReference.child("한용방").child("room_no").setValue("1")
+        databaseReference.child("한용방").child("room_nm").setValue("한용방")
+        databaseReference.child("한용방").child("temp").setValue("21")
+        databaseReference.child("한용방").child("hum").setValue("15")
+        databaseReference.child("한용방").child("gas").setValue("1")
+        databaseReference.child("한용방").child("dust").setValue("0")
+        databaseReference.child("한용방").child("light").setValue("60")
+
+        databaseReference.child("성수방").child("room_no").setValue("2")
+        databaseReference.child("성수방").child("room_nm").setValue("성수방")
+        databaseReference.child("성수방").child("temp").setValue("24")
+        databaseReference.child("성수방").child("hum").setValue("20")
+        databaseReference.child("성수방").child("gas").setValue("0")
+        databaseReference.child("성수방").child("dust").setValue("10")
+        databaseReference.child("성수방").child("light").setValue("35")
+
+        databaseReference.child("민기방").child("room_no").setValue("3")
+        databaseReference.child("민기방").child("room_nm").setValue("민기방")
+        databaseReference.child("민기방").child("temp").setValue("23")
+        databaseReference.child("민기방").child("hum").setValue("10")
+        databaseReference.child("민기방").child("gas").setValue("0")
+        databaseReference.child("민기방").child("dust").setValue("0")
+        databaseReference.child("민기방").child("light").setValue("80")
+
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener(object : OnCompleteListener<InstanceIdResult> {
+            override fun onComplete(p0: Task<InstanceIdResult>) {
+                if(!p0.isSuccessful) {
+                    return
+                }
+                val token = p0.result?.token
+                val msg = getString(R.string.msg_token_fmt,token)
+                Log.d(TAG, msg)
+            }
+
+        })
+    }
 }
