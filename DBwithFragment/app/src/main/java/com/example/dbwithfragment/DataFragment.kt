@@ -65,9 +65,9 @@ class DataFragment : Fragment() {
         mArrayList2 = arrayListOf<RoomData>()
         mAdapter = RoomAdapter(mArrayList)
         mAdapter2 = FbAdapter(mArrayList2)
-        back.setBackgroundColor(Color.parseColor("#D0BFFF"))
+        //back.setBackgroundColor(Color.parseColor("#D0BFFF"))
 
-//        listView_main_list.setBackgroundColor(Color.parseColor("#86A6F8"))
+        //listView_main_list.setBackgroundColor(Color.parseColor("#86A6F8"))
         listView_main_list.layoutManager = LinearLayoutManager(activity)
         listView_main_list.adapter = mAdapter
 

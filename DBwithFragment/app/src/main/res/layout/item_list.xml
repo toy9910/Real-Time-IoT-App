@@ -26,7 +26,7 @@
                 android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
 
             <TextView
                 android:id="@+id/textView_room_nm"
@@ -36,7 +36,7 @@
                 android:layout_marginLeft="5dp"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
 
 
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
 
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_marginLeft="15dp"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
 
             <TextView
                 android:id="@+id/textView_room_gas"
@@ -68,7 +68,7 @@
                 android:layout_marginLeft="20dp"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
 
             <TextView
                 android:id="@+id/textView_room_dust"
@@ -79,7 +79,7 @@
                 android:background="@drawable/circle"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
 
             <TextView
                 android:id="@+id/textView_room_light"
@@ -89,7 +89,7 @@
                 android:layout_marginLeft="15dp"
                 android:gravity="center_horizontal"
                 android:padding="5dp"
-                android:textColor="#E9FFFFFF" />
+                 />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
