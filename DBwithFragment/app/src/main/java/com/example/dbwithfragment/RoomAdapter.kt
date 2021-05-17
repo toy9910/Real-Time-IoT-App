@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_list.*
 import kotlinx.android.synthetic.main.item_list.view.*
@@ -39,6 +40,24 @@ class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textView_room_gas.text = personalData.room_gas
         itemView.textView_room_dust.text = personalData.room_dust
         itemView.textView_room_light.text = personalData.room_light
+
+        when(personalData.room_no.toInt()% 5) {
+            0 ->  {
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_red))
+            }
+            1 ->  {
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_blue))
+            }
+            2 ->  {
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_purple))
+            }
+            3 ->  {
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_yellow))
+            }
+            4 ->  {
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_green))
+            }
+        }
 
         val tv_background = itemView.textView_room_dust.background as GradientDrawable
 
