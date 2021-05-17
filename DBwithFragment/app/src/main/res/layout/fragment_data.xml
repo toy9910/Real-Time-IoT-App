@@ -8,7 +8,7 @@
     android:background="#E9E6D3">
 
     <TextView
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:text="방 전체 조회"
@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:paddingLeft="20dp"
         android:layout_marginHorizontal="5dp"
         android:orientation="horizontal">
 
@@ -111,6 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
         android:textSize="18dp"
+        android:layout_marginLeft="10dp"
         android:text="파이어베이스 데이터"/>
 
     <androidx.recyclerview.widget.RecyclerView

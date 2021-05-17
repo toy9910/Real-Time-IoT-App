@@ -38,17 +38,17 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textView_room_dust.text = personalData.room_dust
         itemView.textView_room_light.text = personalData.room_light
 
-        val tv_background = itemView.textView_room_dust.background as GradientDrawable
+        //val tv_background = itemView.textView_room_dust.background as GradientDrawable
 
         when(personalData.room_no.toInt()% 5) {
             0 ->  {
-                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_red))
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_purple))
             }
             1 ->  {
                 itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_blue))
             }
             2 ->  {
-                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_purple))
+                itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_red))
             }
             3 ->  {
                 itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_yellow))
@@ -58,6 +58,22 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
+        when(personalData.room_dust.toInt()) {
+            in 0..25 ->  {
+                itemView.icon.setImageResource(R.drawable.happy)
+            }
+            in 25..50 ->  {
+                itemView.icon.setImageResource(R.drawable.soso)
+            }
+            in 50..75 ->  {
+                itemView.icon.setImageResource(R.drawable.bad)
+            }
+            in 75..100 ->  {
+                itemView.icon.setImageResource(R.drawable.mask)
+            }
+        }
+
+        /*
         when(personalData.room_dust.toInt()) {
             in 0..49 ->  {
                 tv_background.setColor(Color.parseColor("#08E100"))
@@ -69,6 +85,8 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 tv_background.setColor(Color.parseColor("#D93218"))
             }
         }
+
+         */
     }
 }
 
