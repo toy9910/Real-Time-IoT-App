@@ -66,15 +66,15 @@ class DataFragment : Fragment() {
         mAdapter = RoomAdapter(mArrayList)
         mAdapter2 = FbAdapter(mArrayList2)
 
-        listView_main_list.layoutManager = LinearLayoutManager(activity)
-        listView_main_list.adapter = mAdapter
+        //listView_main_list.layoutManager = LinearLayoutManager(activity)
+        //listView_main_list.adapter = mAdapter
 
 
         listView_fb_list.layoutManager = LinearLayoutManager(activity)
         listView_fb_list.adapter = mAdapter2
 
         val dividerItemDecoration = DividerItemDecoration(activity, LinearLayoutManager(activity).orientation)
-        listView_main_list.addItemDecoration(dividerItemDecoration)
+        //listView_main_list.addItemDecoration(dividerItemDecoration)
 
         mArrayList.clear()
         mAdapter.notifyDataSetChanged()
@@ -84,8 +84,8 @@ class DataFragment : Fragment() {
 
         initDatabase()
 
-        val task = GetData()
-        task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
+//        val task = GetData()
+//        task.execute("http://" + IP_ADDRESS + "/getjson.php", "")
 
         databaseReference.orderByChild("room_no").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

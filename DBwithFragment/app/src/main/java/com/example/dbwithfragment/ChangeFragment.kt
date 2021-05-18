@@ -39,8 +39,8 @@ class ChangeFragment : Fragment() {
 
 
         btn_change.setOnClickListener {
-            val user_id_str = user_id.text.toString()
-            val user_pw_str = user_password.text.toString()
+            val user_id_str = user_change_id?.text.toString()
+            val user_pw_str = user_change_password?.text.toString()
 
 
             if(user_id_str.isEmpty() || user_pw_str.isEmpty())
@@ -49,8 +49,8 @@ class ChangeFragment : Fragment() {
                 val task = InsertData()
                 task.execute("http://" + IP_ADDRESS + "/user_change.php", user_id_str, user_pw_str)
             }
-            user_id.setText("")
-            user_password.setText("")
+            user_change_id.setText("")
+            user_change_password.setText("")
         }
     }
 

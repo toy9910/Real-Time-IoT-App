@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:imeOptions="actionDone"
-            android:id="@+id/user_password"/>
+            android:id="@+id/user_change_password"/>
     </LinearLayout>
     <Button
         android:layout_width="wrap_content"
