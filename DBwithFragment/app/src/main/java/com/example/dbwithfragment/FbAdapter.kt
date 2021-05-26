@@ -32,11 +32,11 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun setHolder(personalData: RoomData) {
         itemView.textView_room_no.text = personalData.room_no
         itemView.textView_room_nm.text = personalData.room_nm
-        itemView.textView_room_temp.text = personalData.room_temperature
-        itemView.textView_room_hum.text = personalData.room_humidity
-        itemView.textView_room_gas.text = personalData.room_gas
-        itemView.textView_room_dust.text = personalData.room_dust
-        itemView.textView_room_light.text = personalData.room_light
+        itemView.textView_room_temp.text = personalData.temperature
+        itemView.textView_room_hum.text = personalData.humidity
+        itemView.textView_room_gas.text = personalData.gas
+        itemView.textView_room_dust.text = personalData.dust
+        itemView.textView_room_light.text = personalData.light
 
         //val tv_background = itemView.textView_room_dust.background as GradientDrawable
 
@@ -58,7 +58,7 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
-        when(personalData.room_dust.toInt()) {
+        when(personalData.dust.toInt()) {
             in 0..25 ->  {
                 itemView.icon.setImageResource(R.drawable.happy)
             }
