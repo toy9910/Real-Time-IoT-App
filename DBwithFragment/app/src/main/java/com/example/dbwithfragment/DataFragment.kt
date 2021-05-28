@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
+import com.google.firebase.firestore.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.InstanceIdResult
 import kotlinx.android.synthetic.main.fragment_data.*
@@ -34,6 +35,8 @@ import java.nio.charset.Charset
 class DataFragment : Fragment() {
     val IP_ADDRESS = "3.35.105.27"
     val TAG = "joljak"
+
+    lateinit var firebaseFirestore: FirebaseFirestore
 
     lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var databaseReference: DatabaseReference
@@ -89,7 +92,7 @@ class DataFragment : Fragment() {
 
         databaseReference.orderByChild("room_no").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                mArrayList.clear()
+                mArrayList2.clear()
                 for(shot in snapshot.children) {
                     var room_no = ""
                     var room_nm = ""
@@ -126,11 +129,11 @@ class DataFragment : Fragment() {
                     val p = RoomData()
                     p.room_no=room_no
                     p.room_nm=room_nm
-                    p.room_temperature=temp
-                    p.room_humidity=hum
-                    p.room_gas=gas
-                    p.room_dust=dust
-                    p.room_light=light
+                    p.temperature=temp
+                    p.humidity=hum
+                    p.gas=gas
+                    p.dust=dust
+                    p.light=light
                     mArrayList2.add(p)
                 }
                 mAdapter2.notifyDataSetChanged()
@@ -139,6 +142,37 @@ class DataFragment : Fragment() {
                 TODO("Not yet implemented")
             }
         })
+
+
+        // FireStore 데이터 자동 업데이트
+//        val ref = firebaseFirestore.collection("Rooms").addSnapshotListener(object : EventListener<QuerySnapshot> {
+//                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+//                    if (error != null) {
+//                        Log.d(TAG, "onEvent: Listen failed!")
+//                        return
+//                    }
+//                    mArrayList2.clear()
+//                    for (doc: QueryDocumentSnapshot in value!!) {
+//                        var room_no = doc.get("room_no").toString()
+//                        var room_nm = doc.get("room_nm").toString()
+//                        var temp = doc.get("temp").toString()
+//                        var hum = doc.get("hum").toString()
+//                        var gas = doc.get("gas").toString()
+//                        var dust = doc.get("dust").toString()
+//                        var light = doc.get("light").toString()
+//                        val p = RoomData()
+//                        p.room_no = room_no
+//                        p.room_nm = room_nm
+//                        p.temperature = temp
+//                        p.humidity = hum
+//                        p.gas = gas
+//                        p.dust = dust
+//                        p.light = light
+//                        mArrayList2.add(p)
+//                    }
+//                    mAdapter2.notifyDataSetChanged()
+//                }
+//            })
     }
 
 
@@ -247,11 +281,11 @@ class DataFragment : Fragment() {
                 val roomData = RoomData()
                 roomData.room_no = id
                 roomData.room_nm = name
-                roomData.room_temperature = temperature
-                roomData.room_humidity = humidity
-                roomData.room_gas = gas
-                roomData.room_dust = dust
-                roomData.room_light = light
+                roomData.temperature = temperature
+                roomData.humidity = humidity
+                roomData.gas = gas
+                roomData.dust = dust
+                roomData.light = light
                 mArrayList.add(roomData)
                 mAdapter.notifyDataSetChanged()
             }
@@ -261,6 +295,36 @@ class DataFragment : Fragment() {
     }
 
     fun initDatabase() {
+        firebaseFirestore = FirebaseFirestore.getInstance()
+        val data1 = hashMapOf(
+            "room_no" to "1",
+            "room_nm" to "한용방",
+            "temp" to "18",
+            "hum" to "10",
+            "gas" to "0",
+            "dust" to "0",
+            "light" to "1"
+        )
+        val data2 = hashMapOf(
+            "room_no" to "2",
+            "room_nm" to "성수방",
+            "temp" to "22",
+            "hum" to "30",
+            "gas" to "1",
+            "dust" to "1",
+            "light" to "1"
+        )
+        firebaseFirestore.collection("Rooms").document("한용방").set(data1).addOnCompleteListener {
+            Log.d(TAG, "initDatabase: success!")
+        }
+        firebaseFirestore.collection("Rooms").document("성수방").set(data2).addOnCompleteListener {
+            Log.d(TAG, "initDatabase: success!")
+        }
+
+
+
+
+
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.getReference("Rooms")
 
@@ -301,3 +365,4 @@ class DataFragment : Fragment() {
         })
     }
 }
+
