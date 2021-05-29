@@ -24,7 +24,7 @@ import java.nio.charset.Charset
 
 class ChangeFragment : Fragment() {
     val IP_ADDRESS = "3.35.105.27"
-    val TAG = "phptest"
+    val TAG = "joljak"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +64,7 @@ class ChangeFragment : Fragment() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             progressDialog.dismiss()
+            Toast.makeText(context,"회원 정보가 변경되었습니다.",Toast.LENGTH_SHORT).show()
             Log.d(TAG, "POST response  - $result")
         }
 
