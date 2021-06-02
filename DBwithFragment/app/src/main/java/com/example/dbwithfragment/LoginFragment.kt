@@ -25,7 +25,7 @@ import java.net.URL
 import java.nio.charset.Charset
 
 class LoginFragment : Fragment() {
-    val IP_ADDRESS = "3.35.105.27"
+    val IP_ADDRESS = "3.36.237.233"
     val TAG = "phptest"
 
     lateinit var mJsonString : String
