@@ -22,12 +22,9 @@ import java.net.URL
 import java.nio.charset.Charset
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
-class TempGraphActivity : AppCompatActivity() {
+class GasGraphActivity : AppCompatActivity() {
     val IP_ADDRESS = "3.36.237.233"
     val TAG = "joljak"
 
@@ -36,14 +33,7 @@ class TempGraphActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_temp_graph)
-
-//        val formatter_start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//        val formatter_end = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00:00")
-//
-//        val current = LocalDate.now()
-//        val cur_date_end = current.format(formatter_start)
-//        val cur_date_start = current.format(formatter_end)
+        setContentView(R.layout.activity_gas_graph)
 
         val cal = Calendar.getInstance()
         cal.time = Date()
@@ -79,17 +69,16 @@ class TempGraphActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
 
         dataVals.clear()
-        val task = GetTempAvgData()
-        task.execute("http://" + IP_ADDRESS + "/temp_getjson.php")
+        val task = GetHumAvgData()
+        task.execute("http://" + IP_ADDRESS + "/gas_getjson.php")
     }
 
-
-    inner class GetTempAvgData : AsyncTask<String, Void, String>() {
+    inner class GetHumAvgData : AsyncTask<String, Void, String>() {
         var progressDialog : ProgressDialog? = null
         lateinit var errorString : String
         override fun onPreExecute() {
             super.onPreExecute()
-            progressDialog = ProgressDialog.show(this@TempGraphActivity,"Please Wait",null,true,true)
+            progressDialog = ProgressDialog.show(this@GasGraphActivity,"Please Wait",null,true,true)
         }
 
         override fun onPostExecute(result: String?) {
@@ -203,7 +192,7 @@ class TempGraphActivity : AppCompatActivity() {
     fun AddEntry() {
         val TAG_JSON = "joljak_dev"
         val TAG_TIME = "measure_time"
-        val TAG_TEMP = "avg_temp"
+        val TAG_GAS = "avg_gas"
 
         try {
             val jsonObject = JSONObject(mJsonString)
@@ -218,10 +207,10 @@ class TempGraphActivity : AppCompatActivity() {
                 stringBuilder.append(time)
                 stringBuilder.delete(2,3)
                 stringBuilder.insert(2,"/")
-                val avg_temp = item.getString(TAG_TEMP).toFloat()
+                val avg_gas = item.getString(TAG_GAS).toFloat()
 
-                Log.d(TAG, "AddEntry: ${dataVals.size.toFloat()+1} ${avg_temp} ${stringBuilder.toString()}")
-                dataVals.add(Entry((dataVals.size+1).toFloat(),avg_temp,stringBuilder.toString()))
+                Log.d(TAG, "AddEntry: ${dataVals.size.toFloat()+1} ${avg_gas} ${stringBuilder.toString()}")
+                dataVals.add(Entry((dataVals.size+1).toFloat(),avg_gas,stringBuilder.toString()))
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);
