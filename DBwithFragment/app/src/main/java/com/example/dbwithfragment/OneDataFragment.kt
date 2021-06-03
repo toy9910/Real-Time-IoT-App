@@ -1,6 +1,7 @@
 package com.example.dbwithfragment
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
@@ -84,6 +85,11 @@ class OneDataFragment : Fragment() {
                 }
             }
         })
+
+        temp_layout.setOnClickListener {
+            val intent = Intent(context,TempGraphActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     //데이터값 보내기

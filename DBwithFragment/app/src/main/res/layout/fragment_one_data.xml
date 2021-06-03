@@ -23,6 +23,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/temp_layout"
             android:layout_width="130dp"
             android:layout_height="160dp"
             android:layout_marginLeft="15dp"

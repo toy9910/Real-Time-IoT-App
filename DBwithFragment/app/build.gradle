@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.dbwithfragment"
-        minSdkVersion 28
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -52,6 +52,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
     implementation 'androidx.work:work-runtime-ktx:2.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'im.dacer:AndroidCharts:1.0.4'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
