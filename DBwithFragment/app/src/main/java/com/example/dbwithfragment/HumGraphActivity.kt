@@ -11,6 +11,8 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.android.synthetic.main.activity_gas_graph.*
+import kotlinx.android.synthetic.main.activity_hum_graph.*
 import kotlinx.android.synthetic.main.activity_temp_graph.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -39,13 +41,16 @@ class HumGraphActivity : AppCompatActivity() {
         val room_no = intent.getStringExtra("room_no")
 
         val cal = Calendar.getInstance()
-        cal.time = Date()
+        //cal.time = Date()
+        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-05-27 23:59:59")
+        cal.time = date
         val format_start: DateFormat = SimpleDateFormat("yyyy-MM-dd 00:00:00")
         val format_end: DateFormat = SimpleDateFormat("yyyy-MM-dd 23:59:59")
 
         val cur_date_start = format_start.format(cal.time)
         val cur_date_end = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal.time)
-        Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal.time)}")
+
+        Log.d(TAG, "onCreate: \n start : $cur_date_start \n end : $cur_date_end")
         cal.add(Calendar.DATE,-1)
         val day1_start = format_start.format(cal.time)
         val day1_end = format_end.format(cal.time)
@@ -73,9 +78,8 @@ class HumGraphActivity : AppCompatActivity() {
 
         dataVals.clear()
         val task = GetHumAvgData()
-        task.execute("http://" + IP_ADDRESS + "/hum_graph_getjson.php", cur_date_start, cur_date_end
-            , day1_start, day1_end, day2_start, day2_end, day3_start, day3_end, day4_start, day4_end, day5_start, day5_end,
-            day6_start, day6_end, room_no)
+        task.execute("http://" + IP_ADDRESS + "/hum_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
+            ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
     }
 
     inner class GetHumAvgData : AsyncTask<String, Void, String>() {
@@ -99,7 +103,7 @@ class HumGraphActivity : AppCompatActivity() {
                 mJsonString = result
                 AddEntry()
 
-                val lineDataset = LineDataSet(dataVals, "온도")
+                val lineDataset = LineDataSet(dataVals, "습도")
                 lineDataset.setCircleColor(Color.GREEN)
                 lineDataset.circleRadius = 4f
                 lineDataset.lineWidth = 1.5f
@@ -108,12 +112,12 @@ class HumGraphActivity : AppCompatActivity() {
 
                 val data = LineData(lineDataset)
                 data.setValueTextSize(10f)
-                tempChart.data = data
-                val customValueFormatter: CustomValueFormatter = CustomValueFormatter(tempChart)
-                tempChart.xAxis.setValueFormatter(customValueFormatter)
+                humChart.data = data
+                val customValueFormatter: CustomValueFormatter = CustomValueFormatter(humChart)
+                humChart.xAxis.setValueFormatter(customValueFormatter)
 
 
-                val xAxis = tempChart.xAxis
+                val xAxis = humChart.xAxis
                 xAxis.apply {
                     position = XAxis.XAxisPosition.BOTTOM
                     textSize = 12f
@@ -126,10 +130,10 @@ class HumGraphActivity : AppCompatActivity() {
                 }
 
 
-                tempChart.apply {
+                humChart.apply {
                     description.text = ""
                     axisRight.isEnabled = false
-                    axisLeft.axisMaximum = 60f
+                    axisLeft.axisMaximum = 100f
                     axisLeft.axisMinimum = 0f
                     legend.apply {
                         textSize = 15f
@@ -138,19 +142,18 @@ class HumGraphActivity : AppCompatActivity() {
 //                orientation = Legend.LegendOrientation.HORIZONTAL
 //                setDrawInside(false)
                     }
-                    tempChart.invalidate()
+                    humChart.invalidate()
                 }
             }
         }
 
         override fun doInBackground(vararg params: String?): String? {
             val serverURL = params[0]
-            val postParameters = "cur_date_start=" + params[1] + "&cur_date_end=" + params[2] +
-                    "&day1_start=" + params[3] + "&day1_end=" + params[4] + "&day2_start=" + params[5] +
-                    "&day2_end=" + params[6] + "&day3_start=" + params[7] + "&day3_end=" + params[8] +
-                    "&day4_start=" + params[9] + "&day4_end=" + params[10] + "&day5_start=" + params[11] +
-                    "&day5_end=" + params[12] + "&day6_start=" + params[13] + "&day6_end=" + params[14] +
-                    "&room_no=" + params[15]
+            val postParameters = "date1=" + params[1] + "&date2=" + params[2] + "&date3=" + params[3] + "&date4=" + params[4] +
+                    "&date5=" + params[5] + "&date6=" + params[6] + "&date7=" + params[7] + "&date8=" + params[8] +
+                    "&date9=" + params[9] + "&date10=" + params[10] + "&date11=" + params[11] + "&date12=" + params[12] +
+                    "&date13=" + params[13] + "&date14=" + params[14] + "&room_no=" + params[15]
+            Log.d(TAG, "doInBackground: $postParameters")
 
             try {
                 val url = URL(serverURL)
@@ -207,6 +210,7 @@ class HumGraphActivity : AppCompatActivity() {
         try {
             val jsonObject = JSONObject(mJsonString)
             val jsonArray = jsonObject.getJSONArray(TAG_JSON)
+            Log.d(TAG, "AddEntry: ${jsonArray.length()}")
 
             for(i in 0 until jsonArray.length()) {
                 val item = jsonArray.getJSONObject(i)
