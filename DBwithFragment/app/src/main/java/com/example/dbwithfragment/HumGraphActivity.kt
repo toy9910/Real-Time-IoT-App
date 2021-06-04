@@ -36,6 +36,8 @@ class HumGraphActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hum_graph)
 
+        val room_no = intent.getStringExtra("room_no")
+
         val cal = Calendar.getInstance()
         cal.time = Date()
         val format_start: DateFormat = SimpleDateFormat("yyyy-MM-dd 00:00:00")
@@ -71,7 +73,9 @@ class HumGraphActivity : AppCompatActivity() {
 
         dataVals.clear()
         val task = GetHumAvgData()
-        task.execute("http://" + IP_ADDRESS + "/hum_getjson.php")
+        task.execute("http://" + IP_ADDRESS + "/hum_graph_getjson.php", cur_date_start, cur_date_end
+            , day1_start, day1_end, day2_start, day2_end, day3_start, day3_end, day4_start, day4_end, day5_start, day5_end,
+            day6_start, day6_end, room_no)
     }
 
     inner class GetHumAvgData : AsyncTask<String, Void, String>() {
@@ -141,7 +145,12 @@ class HumGraphActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: String?): String? {
             val serverURL = params[0]
-            val postParameters = ""
+            val postParameters = "cur_date_start=" + params[1] + "&cur_date_end=" + params[2] +
+                    "&day1_start=" + params[3] + "&day1_end=" + params[4] + "&day2_start=" + params[5] +
+                    "&day2_end=" + params[6] + "&day3_start=" + params[7] + "&day3_end=" + params[8] +
+                    "&day4_start=" + params[9] + "&day4_end=" + params[10] + "&day5_start=" + params[11] +
+                    "&day5_end=" + params[12] + "&day6_start=" + params[13] + "&day6_end=" + params[14] +
+                    "&room_no=" + params[15]
 
             try {
                 val url = URL(serverURL)

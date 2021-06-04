@@ -24,7 +24,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GasGraphActivity : AppCompatActivity() {
+class DustGraphActivity : AppCompatActivity() {
     val IP_ADDRESS = "3.36.237.233"
     val TAG = "joljak"
 
@@ -33,7 +33,7 @@ class GasGraphActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gas_graph)
+        setContentView(R.layout.activity_dust_graph)
 
         val room_no = intent.getStringExtra("room_no")
 
@@ -71,18 +71,18 @@ class GasGraphActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
 
         dataVals.clear()
-        val task = GetHumAvgData()
-        task.execute("http://" + IP_ADDRESS + "/gas_graph_getjson.php", cur_date_start, cur_date_end
-            , day1_start, day1_end, day2_start, day2_end, day3_start, day3_end, day4_start, day4_end, day5_start, day5_end,
-            day6_start, day6_end, room_no)
+        val task = GetDustAvgData()
+        task.execute("http://" + IP_ADDRESS + "/dust_graph_getjson.php", cur_date_start, cur_date_end
+        , day1_start, day1_end, day2_start, day2_end, day3_start, day3_end, day4_start, day4_end, day5_start, day5_end,
+        day6_start, day6_end, room_no)
     }
 
-    inner class GetHumAvgData : AsyncTask<String, Void, String>() {
+    inner class GetDustAvgData : AsyncTask<String, Void, String>() {
         var progressDialog : ProgressDialog? = null
         lateinit var errorString : String
         override fun onPreExecute() {
             super.onPreExecute()
-            progressDialog = ProgressDialog.show(this@GasGraphActivity,"Please Wait",null,true,true)
+            progressDialog = ProgressDialog.show(this@DustGraphActivity,"Please Wait",null,true,true)
         }
 
         override fun onPostExecute(result: String?) {
@@ -201,7 +201,7 @@ class GasGraphActivity : AppCompatActivity() {
     fun AddEntry() {
         val TAG_JSON = "joljak_dev"
         val TAG_TIME = "measure_time"
-        val TAG_GAS = "avg_gas"
+        val TAG_DUST = "avg_dust"
 
         try {
             val jsonObject = JSONObject(mJsonString)
@@ -216,10 +216,10 @@ class GasGraphActivity : AppCompatActivity() {
                 stringBuilder.append(time)
                 stringBuilder.delete(2,3)
                 stringBuilder.insert(2,"/")
-                val avg_gas = item.getString(TAG_GAS).toFloat()
+                val avg_dust = item.getString(TAG_DUST).toFloat()
 
-                Log.d(TAG, "AddEntry: ${dataVals.size.toFloat()+1} ${avg_gas} ${stringBuilder.toString()}")
-                dataVals.add(Entry((dataVals.size+1).toFloat(),avg_gas,stringBuilder.toString()))
+                Log.d(TAG, "AddEntry: ${dataVals.size.toFloat()+1} ${avg_dust} ${stringBuilder.toString()}")
+                dataVals.add(Entry((dataVals.size+1).toFloat(),avg_dust,stringBuilder.toString()))
             }
         } catch (e: JSONException) {
             Log.d(TAG, "showResult : ", e);

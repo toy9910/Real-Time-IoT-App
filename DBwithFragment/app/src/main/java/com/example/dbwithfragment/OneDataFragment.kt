@@ -36,6 +36,7 @@ class OneDataFragment : Fragment() {
     lateinit var mJsonString: String
     lateinit var spinner: Spinner
     lateinit var room_nm : String
+    lateinit var room_no : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +87,24 @@ class OneDataFragment : Fragment() {
             }
         })
 
-        temp_layout.setOnClickListener {
+        layout_temp.setOnClickListener {
             val intent = Intent(context,TempGraphActivity::class.java)
+            intent.putExtra("room_no",room_no)
+            startActivity(intent)
+        }
+        layout_hum.setOnClickListener {
+            val intent = Intent(context,HumGraphActivity::class.java)
+            intent.putExtra("room_no",room_no)
+            startActivity(intent)
+        }
+        layout_dust.setOnClickListener {
+            val intent = Intent(context,DustGraphActivity::class.java)
+            intent.putExtra("room_no",room_no)
+            startActivity(intent)
+        }
+        layout_gas.setOnClickListener {
+            val intent = Intent(context,GasGraphActivity::class.java)
+            intent.putExtra("room_no",room_no)
             startActivity(intent)
         }
     }
@@ -166,7 +183,7 @@ class OneDataFragment : Fragment() {
             var pos2 = position
             pos2 += 1
             Log.d(TAG, "onItemSelected: $pos2")
-            var str = pos2.toString()
+            room_no = pos2.toString()
 
 //            val task = GetData()
 //            task.execute("http://" + IP_ADDRESS + "/query.php", str)

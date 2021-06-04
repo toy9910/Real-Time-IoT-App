@@ -45,42 +45,82 @@ class TempGraphActivity : AppCompatActivity() {
 //        val cur_date_end = current.format(formatter_start)
 //        val cur_date_start = current.format(formatter_end)
 
+        val room_no = intent.getStringExtra("room_no")
+
+        val raw = """
+            "$room_no"
+        """.trimIndent()
+
+        Log.d(TAG, "onCreate: $raw")
+
         val cal = Calendar.getInstance()
-        cal.time = Date()
+        //cal.time = Date()
+        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-05-27 23:59:59")
+        cal.time = date
         val format_start: DateFormat = SimpleDateFormat("yyyy-MM-dd 00:00:00")
         val format_end: DateFormat = SimpleDateFormat("yyyy-MM-dd 23:59:59")
 
-        val cur_date_start = format_start.format(cal.time)
-        val cur_date_end = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal.time)
-        Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal.time)}")
+        val cur_date_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val cur_date_end = """
+            "${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal.time)}"
+        """.trimIndent()
+        Log.d(TAG, "onCreate: \n start : $cur_date_start \n end : $cur_date_end")
         cal.add(Calendar.DATE,-1)
-        val day1_start = format_start.format(cal.time)
-        val day1_end = format_end.format(cal.time)
+        val day1_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val day1_end = """
+            "${format_end.format(cal.time)}"
+        """.trimIndent()
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
         cal.add(Calendar.DATE,-1)
-        val day2_start = format_start.format(cal.time)
-        val day2_end = format_end.format(cal.time)
+        val day2_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val day2_end = """
+            "${format_end.format(cal.time)}"
+        """.trimIndent()
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
         cal.add(Calendar.DATE,-1)
-        val day3_start = format_start.format(cal.time)
-        val day3_end = format_end.format(cal.time)
+        val day3_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val day3_end = """
+            "${format_end.format(cal.time)}"
+        """.trimIndent()
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
         cal.add(Calendar.DATE,-1)
-        val day4_start = format_start.format(cal.time)
-        val day4_end = format_end.format(cal.time)
+        val day4_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val day4_end = """
+            "${format_end.format(cal.time)}"
+        """.trimIndent()
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
         cal.add(Calendar.DATE,-1)
-        val day5_start = format_start.format(cal.time)
-        val day5_end = format_end.format(cal.time)
+        val day5_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val day5_end = """
+            "${format_end.format(cal.time)}"
+        """.trimIndent()
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
         cal.add(Calendar.DATE,-1)
-        val day6_start = format_start.format(cal.time)
-        val day6_end = format_end.format(cal.time)
+        val day6_start = """
+            "${format_start.format(cal.time)}"
+        """.trimIndent()
+        val day6_end = """
+            "${format_end.format(cal.time)}"
+        """.trimIndent()
         Log.d(TAG, "onCreate: \n start : ${format_start.format(cal.time)} \n end : ${format_end.format(cal.time)}")
 
         dataVals.clear()
         val task = GetTempAvgData()
-        task.execute("http://" + IP_ADDRESS + "/temp_getjson.php")
+        task.execute("http://" + IP_ADDRESS + "/temp_graph_getjson.php", cur_date_start, cur_date_end
+            , day1_start, day1_end, day2_start, day2_end, day3_start, day3_end, day4_start, day4_end, day5_start, day5_end,
+            day6_start, day6_end, room_no)
     }
 
 
@@ -151,7 +191,13 @@ class TempGraphActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: String?): String? {
             val serverURL = params[0]
-            val postParameters = ""
+            val postParameters = "cur_date_start=" + params[1] + "&cur_date_end=" + params[2] +
+                    "&day1_start=" + params[3] + "&day1_end=" + params[4] + "&day2_start=" + params[5] +
+                    "&day2_end=" + params[6] + "&day3_start=" + params[7] + "&day3_end=" + params[8] +
+                    "&day4_start=" + params[9] + "&day4_end=" + params[10] + "&day5_start=" + params[11] +
+                    "&day5_end=" + params[12] + "&day6_start=" + params[13] + "&day6_end=" + params[14] +
+                    "&room_no=" + params[15]
+            Log.d(TAG, "doInBackground: $postParameters")
 
             try {
                 val url = URL(serverURL)
@@ -208,6 +254,7 @@ class TempGraphActivity : AppCompatActivity() {
         try {
             val jsonObject = JSONObject(mJsonString)
             val jsonArray = jsonObject.getJSONArray(TAG_JSON)
+            Log.d(TAG, "AddEntry: ${jsonArray.length()}")
 
             for(i in 0 until jsonArray.length()) {
                 val item = jsonArray.getJSONObject(i)

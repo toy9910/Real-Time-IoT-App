@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DBwithFragment"
         android:usesCleartextTraffic="true">
-        <activity android:name=".GasGraphActivity"></activity>
+        <activity android:name=".DustGraphActivity"></activity>
+        <activity android:name=".GasGraphActivity" />
         <activity android:name=".HumGraphActivity" />
         <activity android:name=".TempGraphActivity" />
         <activity android:name=".MainActivity">
