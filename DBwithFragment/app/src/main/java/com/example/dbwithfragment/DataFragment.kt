@@ -81,7 +81,7 @@ class DataFragment : Fragment() {
         mAdapter2.notifyDataSetChanged()
 
         initDatabase()
-
+//
         /*
         // FireStore 데이터 자동 업데이트
         val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object : EventListener<QuerySnapshot> {
