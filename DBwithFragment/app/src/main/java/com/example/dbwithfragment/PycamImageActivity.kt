@@ -1,5 +1,6 @@
 package com.example.dbwithfragment
 
+import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,8 @@ import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_pycam_image.*
 import kotlinx.android.synthetic.main.fragment_data.*
+import kotlinx.android.synthetic.main.image_dialog.*
+import kotlinx.android.synthetic.main.pycam_image_item_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -115,15 +118,11 @@ class PycamImageActivity : AppCompatActivity() {
             ): Boolean {
                 return false
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 pycamList.removeAt(viewHolder.layoutPosition)
                 pycamAdapter.notifyItemRemoved(viewHolder.layoutPosition)
             }
-
-
         }
-
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(rv_pycam)
     }

@@ -38,13 +38,6 @@ class TempGraphActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_temp_graph)
 
-//        val formatter_start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//        val formatter_end = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00:00")
-//
-//        val current = LocalDate.now()
-//        val cur_date_end = current.format(formatter_start)
-//        val cur_date_start = current.format(formatter_end)
-
         val room_no = intent.getStringExtra("room_no")
 
 
@@ -88,7 +81,6 @@ class TempGraphActivity : AppCompatActivity() {
         val task = GetTempAvgData()
         task.execute("http://" + IP_ADDRESS + "/temp_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
             ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
-
     }
 
 

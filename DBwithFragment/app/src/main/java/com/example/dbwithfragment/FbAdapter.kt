@@ -52,8 +52,6 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.textView_room_dust.text = personalData.dust
         itemView.textView_room_light.text = personalData.light
 
-        //val tv_background = itemView.textView_room_dust.background as GradientDrawable
-
         when(personalData.room_no.toInt()% 5) {
             0 ->  {
                 itemView.card_view.setCardBackgroundColor(ContextCompat.getColor(itemView.context, R.color.one_data_purple))
@@ -86,21 +84,6 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.icon.setImageResource(R.drawable.mask)
             }
         }
-
-        /*
-        when(personalData.room_dust.toInt()) {
-            in 0..49 ->  {
-                tv_background.setColor(Color.parseColor("#08E100"))
-            }
-            in 50..69 ->  {
-                tv_background.setColor(Color.parseColor("#F5A623"))
-            }
-            in 70..100 ->  {
-                tv_background.setColor(Color.parseColor("#D93218"))
-            }
-        }
-
-         */
     }
 }
 

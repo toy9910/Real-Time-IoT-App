@@ -29,11 +29,9 @@ import java.nio.charset.Charset
 
 // 방별 조회
 class OneDataFragment : Fragment() {
-    val IP_ADDRESS = "3.36.237.233"
     val TAG = "joljak"
 
     lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var mJsonString: String
     lateinit var spinner: Spinner
     lateinit var room_nm : String
     lateinit var room_no : String
