@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.NumberPicker
 import android.widget.SeekBar
 import android.widget.Spinner
 import androidx.core.app.NotificationCompat
@@ -22,6 +23,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.*
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_one_data.*
 import org.json.JSONException
@@ -42,8 +44,10 @@ class OneDataFragment : Fragment() {
     val TAG = "joljak"
 
     lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var firebaseDatabase: FirebaseDatabase
+    lateinit var datbaseReference: DatabaseReference
+
     lateinit var spinner: Spinner
-    lateinit var room_nm : String
     lateinit var room_no : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,9 +101,12 @@ class OneDataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        createNotificationChannel()
         firebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        datbaseReference = firebaseDatabase.getReference("Rooms")
 
         spinner = one_spinner
         spinner.onItemSelectedListener = SpinnerListener()
+
 
         // seekbar 현재 디비값 보내는거
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -117,11 +124,15 @@ class OneDataFragment : Fragment() {
                 //현재 어떤 방인지, 빛의 밝기를 데이터 보내는과정
                 val light = one_led.text.toString()
 
+                datbaseReference.child(room_no).child("light").setValue(light)
+
+
+                /*
                 val ref = firebaseFirestore.collection("rooms").document(room_nm)
                 Log.d(TAG, "onStopTrackingTouch: $room_nm")
                 ref.update("light",light.toInt()).addOnCompleteListener {
                     Log.d(TAG, "Snapshot successfully updated!!")
-                }
+                }*/
             }
         })
 
@@ -155,9 +166,76 @@ class OneDataFragment : Fragment() {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             var pos2 = position
             pos2 += 1
-            Log.d(TAG, "onItemSelected: $pos2")
             room_no = pos2.toString()
 
+
+            datbaseReference.orderByChild("room_no").equalTo(pos2.toString()).addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                        Log.d("TT", "onDataChange: ${snapshot.child(room_no).child("temp").value}")
+                        one_temp?.text = snapshot.child(room_no).child("temp").value.toString()
+                        one_humidity?.text = snapshot.child(room_no).child("hum").value.toString()
+                        one_gas?.text = snapshot.child(room_no).child("gas").value.toString()
+                        one_dust?.text = snapshot.child(room_no).child("dust").value.toString()
+                        one_led?.text = snapshot.child(room_no).child("light").value.toString()
+                }
+            })
+
+/*
+            datbaseReference.orderByChild("room_no").addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for(shot in snapshot.children) {
+                        var room_no = ""
+                        var room_nm = ""
+                        var temp = ""
+                        var hum = ""
+                        var gas = ""
+                        var dust = ""
+                        var light = ""
+                        for (shot2 in shot.children) {
+                            when(shot2.key) {
+                                "room_no" -> {
+                                    room_no = shot2.value.toString()
+                                }
+                                "room_nm" -> {
+                                    room_nm = shot2.value.toString()
+                                }
+                                "temp" -> {
+                                    temp = shot2.value.toString()
+                                }
+                                "hum" -> {
+                                    hum = shot2.value.toString()
+                                }
+                                "gas" -> {
+                                    gas = shot2.value.toString()
+                                }
+                                "dust" -> {
+                                    dust = shot2.value.toString()
+                                }
+                                "light" -> {
+                                    light = shot2.value.toString()
+                                }
+                            }
+                        }
+                        one_temp.text = temp
+//                            if(temp.toDouble() > 50)
+//                                sendNotification()
+                        one_humidity.text = hum
+                        one_gas.text = gas
+                        one_dust.text = dust
+                        one_led.text = light
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })*/
+
+/*
             val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object :
                 EventListener<QuerySnapshot> {
                 override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
@@ -187,7 +265,7 @@ class OneDataFragment : Fragment() {
                         }
                     }
                 }
-            })
+            })*/
         }
         override fun onNothingSelected(parent: AdapterView<*>?) {
             TODO("Not yet implemented")

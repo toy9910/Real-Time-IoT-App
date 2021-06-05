@@ -38,6 +38,8 @@ class DataFragment : Fragment() {
     val TAG = "joljak"
 
     lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var firebaseDatabase: FirebaseDatabase
+    lateinit var databaseReference: DatabaseReference
 
     lateinit var mArrayList : ArrayList<RoomData>
     lateinit var mArrayList2 : ArrayList<RoomData>
@@ -61,6 +63,9 @@ class DataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        databaseReference = firebaseDatabase.getReference("Rooms")
+
         mArrayList = arrayListOf()
         mArrayList2 = arrayListOf()
         mAdapter = RoomAdapter(mArrayList)
@@ -77,6 +82,7 @@ class DataFragment : Fragment() {
 
         initDatabase()
 
+        /*
         // FireStore 데이터 자동 업데이트
         val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object : EventListener<QuerySnapshot> {
                 override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
@@ -107,6 +113,59 @@ class DataFragment : Fragment() {
                     mAdapter2.notifyDataSetChanged()
                 }
             })
+         */
+        databaseReference.orderByChild("room_no").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                mArrayList.clear()
+                for(shot in snapshot.children) {
+                    var room_no = ""
+                    var room_nm = ""
+                    var temp = ""
+                    var hum = ""
+                    var gas = ""
+                    var dust = ""
+                    var light = ""
+                    for (shot2 in shot.children) {
+                        when(shot2.key) {
+                            "room_no" -> {
+                                room_no = shot2.value.toString()
+                            }
+                            "room_nm" -> {
+                                room_nm = shot2.value.toString()
+                            }
+                            "temp" -> {
+                                temp = shot2.value.toString()
+                            }
+                            "hum" -> {
+                                hum = shot2.value.toString()
+                            }
+                            "gas" -> {
+                                gas = shot2.value.toString()
+                            }
+                            "dust" -> {
+                                dust = shot2.value.toString()
+                            }
+                            "light" -> {
+                                light = shot2.value.toString()
+                            }
+                        }
+                    }
+                    val p = RoomData()
+                    p.room_no=room_no
+                    p.room_nm=room_nm
+                    p.temperature=temp
+                    p.humidity=hum
+                    p.gas=gas
+                    p.dust=dust
+                    p.light=light
+                    mArrayList2.add(p)
+                }
+                mAdapter2.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 
@@ -123,6 +182,7 @@ class DataFragment : Fragment() {
                 Log.d(TAG, msg)
             }
         })
+
     }
 }
 
