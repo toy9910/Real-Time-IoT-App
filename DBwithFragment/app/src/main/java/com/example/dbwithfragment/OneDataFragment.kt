@@ -76,9 +76,6 @@ class OneDataFragment : Fragment() {
                 //현재 어떤 방인지, 빛의 밝기를 데이터 보내는과정
                 val light = one_led.text.toString()
 
-//                val task = InsertData()
-//                task.execute("http://" + IP_ADDRESS + "/insert.php", room_num, light)
-
                 val ref = firebaseFirestore.collection("rooms").document(room_nm)
                 Log.d(TAG, "onStopTrackingTouch: $room_nm")
                 ref.update("light",light.toInt()).addOnCompleteListener {
@@ -107,76 +104,11 @@ class OneDataFragment : Fragment() {
             intent.putExtra("room_no",room_no)
             startActivity(intent)
         }
+        layout_light.setOnClickListener {
+            startActivity(Intent(context,PycamImageActivity::class.java))
+        }
     }
 
-    //데이터값 보내기
-//    inner class InsertData : AsyncTask<String, Void, String>() {
-//        lateinit var progressDialog: ProgressDialog
-//        override fun onPreExecute() {
-//            super.onPreExecute()
-//            progressDialog = ProgressDialog.show(activity, "Please Wait", null, true, true)
-//        }
-//
-//        override fun onPostExecute(result: String?) {
-//            super.onPostExecute(result)
-//            progressDialog.dismiss()
-//            Log.d(TAG, "POST response  - $result")
-//        }
-//
-//        override fun doInBackground(vararg params: String?): String {
-//            val room_no = params[1]
-//            val light = params[2]
-//
-//            val serverURL = params[0]
-//            val postParameters = "room_no=" + room_no + "&light=" + light
-//
-//            try {
-//                val url = URL(serverURL)
-//                val httpURLConnection = url.openConnection() as HttpURLConnection
-//
-//                httpURLConnection.readTimeout = 5000
-//                httpURLConnection.connectTimeout = 5000
-//                httpURLConnection.requestMethod = "POST"
-//                httpURLConnection.connect()
-//
-//                val outputStream = httpURLConnection.outputStream
-//                outputStream.write(postParameters.toByteArray(Charset.defaultCharset()))
-//                outputStream.flush()
-//                outputStream.close()
-//
-//                val responseStatusCode = httpURLConnection.responseCode
-//                Log.d(TAG, "POST response code - $responseStatusCode");
-//
-//                var inputStream: InputStream? = null
-//                if (responseStatusCode == HttpURLConnection.HTTP_OK)
-//                    inputStream = httpURLConnection.inputStream
-//                else
-//                    inputStream = httpURLConnection.errorStream
-//
-//
-//                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
-//                val bufferedReader = BufferedReader(inputStreamReader)
-//
-//                val sb = StringBuilder()
-//                var line: String? = null
-//
-//                while (true) {
-//                    line = bufferedReader.readLine()
-//                    if (line != null)
-//                        sb.append(line)
-//                    else
-//                        break
-//                }
-//
-//                bufferedReader.close()
-//                return sb.toString()
-//            } catch (e: Exception) {
-//                Log.d(TAG, "InsertData: Error ", e);
-//                val message = "Error: " + e.message
-//                return message
-//            }
-//        }
-//    }
 
     inner class SpinnerListener : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -184,9 +116,6 @@ class OneDataFragment : Fragment() {
             pos2 += 1
             Log.d(TAG, "onItemSelected: $pos2")
             room_no = pos2.toString()
-
-//            val task = GetData()
-//            task.execute("http://" + IP_ADDRESS + "/query.php", str)
 
             val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object :
                 EventListener<QuerySnapshot> {
@@ -221,125 +150,4 @@ class OneDataFragment : Fragment() {
             TODO("Not yet implemented")
         }
     }
-
-//    fun setButtons() {
-//        button_main_search.setOnClickListener {
-//            mArrayList.clear()
-//            mAdapter.notifyDataSetChanged()
-//
-//            val keyWord = editText_main_searchKeyword.text.toString()
-//            editText_main_searchKeyword.setText("")
-//
-//            val task = GetData()
-//            task.execute("http://" + IP_ADDRESS + "/query.php", keyWord)
-//        }
-//    }
-
-//    inner class GetData : AsyncTask<String, Void, String>() {
-//        var progressDialog: ProgressDialog? = null
-//        lateinit var errorString: String
-//        override fun onPreExecute() {
-//            super.onPreExecute()
-//            progressDialog = ProgressDialog.show(activity, "Please Wait", null, true, true)
-//        }
-//
-//        override fun onPostExecute(result: String?) {
-//            super.onPostExecute(result)
-//
-//            progressDialog?.dismiss()
-//
-//            Log.d(TAG, "response - $result")
-//
-//            if (result == null)
-//                Log.e(TAG, errorString)
-//            else {
-//                mJsonString = result
-//                showResult()
-//            }
-//        }
-//
-//        override fun doInBackground(vararg params: String?): String? {
-//            val serverURL = params[0]
-//            val postParameters = "room_no=" + params[1]
-//
-//            Log.d(TAG, "onItemSelected: $postParameters")
-//            try {
-//                val url = URL(serverURL)
-//                val httpURLConnection = url.openConnection() as HttpURLConnection
-//
-//                httpURLConnection.readTimeout = 5000
-//                httpURLConnection.connectTimeout = 5000
-//                httpURLConnection.requestMethod = "POST"
-//                httpURLConnection.doInput = true
-//                httpURLConnection.connect()
-//
-//                val outputStream = httpURLConnection.outputStream
-//                outputStream.write(postParameters?.toByteArray(Charset.defaultCharset()))
-//                outputStream.flush()
-//                outputStream.close()
-//
-//                val responseStatusCode = httpURLConnection.responseCode
-//                Log.d(TAG, "response code - $responseStatusCode");
-//
-//                var inputStream: InputStream? = null
-//                if (responseStatusCode == HttpURLConnection.HTTP_OK)
-//                    inputStream = httpURLConnection.inputStream
-//                else
-//                    inputStream = httpURLConnection.errorStream
-//
-//                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
-//                val bufferedReader = BufferedReader(inputStreamReader)
-//
-//                val sb = StringBuilder()
-//                var line: String? = null
-//
-//                while (true) {
-//                    line = bufferedReader.readLine()
-//                    if (line != null)
-//                        sb.append(line)
-//                    else
-//                        break
-//                }
-//                bufferedReader.close()
-//                return sb.toString().trim()
-//            } catch (e: Exception) {
-//                Log.d(TAG, "GetData : Error ", e);
-//                errorString = e.toString();
-//                return null
-//            }
-//        }
-//    }
-//
-//    fun showResult() {
-//        val TAG_JSON = "joljak_dev"
-//        val TAG_TEMPERATURE = "temperature"
-//        val TAG_HUMIDITY = "humidity"
-//        val TAG_GAS = "gas"
-//        val TAG_DUST = "dust"
-//        val TAG_LIGHT = "light"
-//
-//        try {
-//            val jsonObject = JSONObject(mJsonString)
-//            val jsonArray = jsonObject.getJSONArray(TAG_JSON)
-//
-//            for (i in 0 until jsonArray.length()) {
-//                val item = jsonArray.getJSONObject(i)
-//
-//                val temperature = item.getString(TAG_TEMPERATURE)
-//                val humidity = item.getString(TAG_HUMIDITY)
-//                val gas = item.getString(TAG_GAS)
-//                val dust = item.getString(TAG_DUST)
-//                val light = item.getString(TAG_LIGHT)
-//
-//                one_temp.text = temperature
-//                one_humidity.text = humidity
-//                one_gas.text = gas
-//                one_dust.text = dust
-//                one_led.text = light
-//                seekBar.progress = light.toInt()
-//            }
-//        } catch (e: JSONException) {
-//            Log.d(TAG, "showResult : ", e);
-//        }
-//    }
 }

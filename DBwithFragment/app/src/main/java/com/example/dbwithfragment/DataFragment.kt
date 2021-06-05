@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
@@ -60,8 +62,8 @@ class DataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mArrayList = arrayListOf<RoomData>()
-        mArrayList2 = arrayListOf<RoomData>()
+        mArrayList = arrayListOf()
+        mArrayList2 = arrayListOf()
         mAdapter = RoomAdapter(mArrayList)
         mAdapter2 = FbAdapter(mArrayList2)
 
@@ -73,6 +75,29 @@ class DataFragment : Fragment() {
 
         mArrayList2.clear()
         mAdapter2.notifyDataSetChanged()
+
+//        val helper = ItemTouchHelper(ItemTouchHelperCallback(mAdapter2))
+//        helper.attachToRecyclerView(listView_fb_list)
+
+//        val simpleCallback : ItemTouchHelper.SimpleCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+//            override fun onMove(
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                target: RecyclerView.ViewHolder
+//            ): Boolean {
+//                return false
+//            }
+//
+//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//
+//                mArrayList2.removeAt(viewHolder.layoutPosition)
+//                mAdapter2.notifyItemRemoved(viewHolder.layoutPosition)
+//            }
+//
+//        }
+//
+//        val itemTouchHelper = ItemTouchHelper(simpleCallback)
+//        itemTouchHelper.attachToRecyclerView(listView_fb_list)
 
         initDatabase()
 

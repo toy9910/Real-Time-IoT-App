@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_list.view.*
 
-class FbAdapter (list: ArrayList<RoomData>) : RecyclerView.Adapter<CustomViewHolder2>() {
+class FbAdapter (list: ArrayList<RoomData>) : RecyclerView.Adapter<CustomViewHolder2>(), ItemTouchHelperListener {
     var mList : ArrayList<RoomData> = list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder2 {
@@ -24,6 +24,20 @@ class FbAdapter (list: ArrayList<RoomData>) : RecyclerView.Adapter<CustomViewHol
     override fun onBindViewHolder(holder: CustomViewHolder2, position: Int) {
         val p = mList.get(position)
         holder.setHolder(p)
+    }
+
+    override fun onItemMove(from_position: Int, to_position: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onItemSwipe(position: Int) {
+        mList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    override fun onRightClick(position: Int, viewHolder: RecyclerView.ViewHolder) {
+        mList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }
 
