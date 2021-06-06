@@ -164,7 +164,8 @@ class OneDataFragment : Fragment() {
             startActivity(intent)
         }
         layout_light.setOnClickListener {
-            startActivity(Intent(context,PycamImageActivity::class.java))
+            //startActivity(Intent(context,PycamImageActivity::class.java))
+            startActivity(Intent(context,WebViewActivity::class.java))
         }
     }
 
