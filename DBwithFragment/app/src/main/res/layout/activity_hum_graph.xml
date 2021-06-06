@@ -6,11 +6,57 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".HumGraphActivity">
+    tools:context=".HumGraphActivity"
+    android:background="#E9E6D3"
+    android:weightSum="4">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:weightSum="4"
+        >
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/celsius_white"
+            android:layout_weight="1"
+            android:background="@color/one_data_red"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/humidity1_white"
+            android:layout_weight="1"
+            android:background="@color/one_data_blue"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/valve_white"
+            android:layout_weight="1"
+            android:background="@color/one_data_purple"
+            />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/air_white"
+            android:layout_weight="1"
+            android:background="@color/one_data_yellow"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        >
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/humChart"
+            android:layout_width="330dp"
+            android:layout_height="330dp"/>
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/humChart"
-        android:layout_width="330dp"
-        android:layout_height="330dp"/>
+    </LinearLayout>
+
+
 
 </LinearLayout>

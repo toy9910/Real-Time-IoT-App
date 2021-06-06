@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.Spinner
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
@@ -45,6 +46,8 @@ class OneDataFragment : Fragment() {
     lateinit var spinner: Spinner
     lateinit var room_nm : String
     lateinit var room_no : String
+
+    private lateinit var callback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,9 +148,7 @@ class OneDataFragment : Fragment() {
             intent.putExtra("room_no",room_no)
             startActivity(intent)
         }
-        layout_light.setOnClickListener {
-            startActivity(Intent(context,PycamImageActivity::class.java))
-        }
+
     }
 
 
@@ -192,5 +193,21 @@ class OneDataFragment : Fragment() {
         override fun onNothingSelected(parent: AdapterView<*>?) {
             TODO("Not yet implemented")
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                var a = activity as MainActivity
+                a.replaceFragment(StartMenuFragment())
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }
