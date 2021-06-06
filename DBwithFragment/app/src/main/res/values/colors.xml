@@ -24,5 +24,11 @@
     <color name="one_data_yellow">#FFDE00</color>
     <color name="one_data_green">#47C83E</color>
 
+    <color name="ex_orange">#F29661</color>
+    <color name="ex_red">#F15F5F</color>
+    <color name="ex_blue">#5CD1E5</color>
+    <color name="ex_green">#86E57F</color>
+    <color name="ex_purple">#D1B2FF</color>
+
 
 </resources>

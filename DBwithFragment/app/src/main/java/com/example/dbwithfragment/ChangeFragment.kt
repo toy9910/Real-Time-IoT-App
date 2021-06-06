@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_change.*
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -25,6 +26,8 @@ import java.nio.charset.Charset
 class ChangeFragment : Fragment() {
     val IP_ADDRESS = "3.36.237.233"
     val TAG = "joljak"
+
+    private lateinit var callback: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,6 +124,22 @@ class ChangeFragment : Fragment() {
                 return message
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                var a = activity as MainActivity
+                a.replaceFragment(StartMenuFragment())
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
 }

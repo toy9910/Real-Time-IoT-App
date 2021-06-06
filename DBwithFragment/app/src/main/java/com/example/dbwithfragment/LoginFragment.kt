@@ -162,7 +162,7 @@ class LoginFragment : Fragment() {
 
             if(isTrue) {
                 var a = activity as MainActivity
-                a.replaceFragment(DataFragment())
+                a.replaceFragment(StartMenuFragment())
             }
             else {
                 Toast.makeText(context,"비밀 번호가 다릅니다!",Toast.LENGTH_SHORT).show()

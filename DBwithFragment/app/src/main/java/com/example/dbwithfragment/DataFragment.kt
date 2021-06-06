@@ -1,6 +1,7 @@
 package com.example.dbwithfragment
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.AsyncTask
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -43,6 +45,8 @@ class DataFragment : Fragment() {
     lateinit var mArrayList2 : ArrayList<RoomData>
     lateinit var mAdapter: RoomAdapter
     lateinit var mAdapter2: FbAdapter
+
+    private lateinit var callback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +127,21 @@ class DataFragment : Fragment() {
                 Log.d(TAG, msg)
             }
         })
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                var a = activity as MainActivity
+                a.replaceFragment(StartMenuFragment())
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }
 
