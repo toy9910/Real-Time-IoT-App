@@ -61,7 +61,7 @@ class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         //val tv_background = itemView.textView_room_dust.background as GradientDrawable
 
-        when(personalData.dust.toInt()) {
+        when(personalData.dust.toDouble()) {
             in 0..25 ->  {
                 itemView.icon.setImageResource(R.drawable.happy)
             }

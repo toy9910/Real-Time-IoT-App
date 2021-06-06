@@ -175,23 +175,20 @@ class OneDataFragment : Fragment() {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     Log.d("TT", "onDataChange: ${snapshot.child(room_no).child("temp").value}")
-                    var array = snapshot.child(room_no).child("temp").value.toString().split(".")
-                    one_temp?.text = array[0]
-                    array = snapshot.child(room_no).child("hum").value.toString().split(".")
-                    one_humidity?.text = array[0]
+                    one_temp?.text = snapshot.child(room_no).child("temp").value.toString()
+                    one_humidity?.text = snapshot.child(room_no).child("hum").value.toString()
 
 //                    val Tf = one_temp.text.toString().toDouble()
 //                    val RH = one_humidity.text.toString().toDouble()
 //                    HI = -42.3 + 2.0 * Tf + 10.1 * RH - 0.2*Tf*RH - ((6.8 / 1000 )*(Tf * Tf)) - ((5.4 / 100 )*(RH * RH)) + ((1.2 / 1000)*(Tf * Tf)*(RH)) + ((8.5 / 10000)*(Tf)*(RH * RH)) - ((1.9 / 1000000)*(Tf * Tf)*(RH * RH))
 //                    if(HI > 40.0)
 //                        sendNotification()
-                    array = snapshot.child(room_no).child("gas").value.toString().split(".")
-                    one_gas?.text = array[0]
+
+                    one_gas?.text = snapshot.child(room_no).child("gas").value.toString()
                     val GAS_VAL = one_gas.text.toString().toDouble()
                     if(GAS_VAL > 350)
                         sendNotification()
-                    array = snapshot.child(room_no).child("dust").value.toString().split(".")
-                    one_dust?.text = array[0]
+                    one_dust?.text = snapshot.child(room_no).child("dust").value.toString()
                     one_led?.text = snapshot.child(room_no).child("light").value.toString()
                 }
             })

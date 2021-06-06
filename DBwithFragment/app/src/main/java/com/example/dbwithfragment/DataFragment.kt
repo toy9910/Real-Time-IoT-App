@@ -133,20 +133,16 @@ class DataFragment : Fragment() {
                                 room_nm = shot2.value.toString()
                             }
                             "temp" -> {
-                                val array = shot2.value.toString().split(".")
-                                temp = array[0]
+                                temp = shot2.value.toString()
                             }
                             "hum" -> {
-                                val array = shot2.value.toString().split(".")
-                                hum = array[0]
+                                hum = shot2.value.toString()
                             }
                             "gas" -> {
-                                val array = shot2.value.toString().split(".")
-                                gas = array[0]
+                                gas = shot2.value.toString()
                             }
                             "dust" -> {
-                                val array = shot2.value.toString().split(".")
-                                dust = array[0]
+                                dust = shot2.value.toString()
                             }
                             "light" -> {
                                 light = shot2.value.toString()

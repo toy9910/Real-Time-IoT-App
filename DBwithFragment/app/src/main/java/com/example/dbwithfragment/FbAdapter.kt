@@ -70,7 +70,7 @@ class CustomViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
-        when(personalData.dust.toInt()) {
+        when(personalData.dust.toDouble()) {
             in 0..25 ->  {
                 itemView.icon.setImageResource(R.drawable.happy)
             }

@@ -25,6 +25,8 @@ class WebViewFragment :Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         webview_pycam.setWebViewClient(object : WebViewClient() {})
+        webview_pycam.settings.useWideViewPort = true; // wide viewport를 유연하게 설정하고
+        webview_pycam.settings.loadWithOverviewMode = true; // 컨텐츠가 웹뷰 범위에 벗어날 경우  크기에 맞게 조절
         webview_pycam.loadUrl("http://203.229.55.130:8000")
 
         layout_img_list.setOnClickListener {
@@ -32,7 +34,6 @@ class WebViewFragment :Fragment() {
             startActivity(intent)
         }
     }
-
 
 
     override fun onAttach(context: Context) {

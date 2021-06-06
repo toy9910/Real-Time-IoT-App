@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:paddingLeft="8dp"
         android:layout_marginHorizontal="5dp"
         android:orientation="horizontal">
 
@@ -31,7 +30,6 @@
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:padding="5dp"
             android:text="방 번호"
             android:textStyle="bold"
              />
@@ -43,7 +41,6 @@
             android:layout_marginHorizontal="5dp"
             android:text="방 이름"
             android:textStyle="bold"
-            android:padding="5dp"
             />
 
 
@@ -54,7 +51,6 @@
             android:layout_marginHorizontal="5dp"
             android:text="온도"
             android:textStyle="bold"
-            android:padding="5dp"
             />
 
 
@@ -65,7 +61,6 @@
             android:layout_marginHorizontal="5dp"
             android:text="습도"
             android:textStyle="bold"
-            android:padding="5dp"
             />
 
         <TextView
@@ -75,7 +70,6 @@
             android:layout_marginHorizontal="5dp"
             android:text="가스"
             android:textStyle="bold"
-            android:padding="5dp"
             />
 
         <TextView
@@ -85,7 +79,6 @@
             android:layout_marginHorizontal="5dp"
             android:text="먼지"
             android:textStyle="bold"
-            android:padding="5dp"
             />
 
         <TextView
@@ -95,7 +88,6 @@
             android:layout_marginHorizontal="5dp"
             android:text="조명"
             android:textStyle="bold"
-            android:padding="5dp"
             />
 
     </LinearLayout>
