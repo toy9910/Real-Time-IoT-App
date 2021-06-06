@@ -72,7 +72,7 @@ class DataFragment : Fragment() {
         mAdapter2 = FbAdapter(mArrayList2)
 
         listView_fb_list.layoutManager = LinearLayoutManager(activity)
-        listView_fb_list.adapter = mAdapter2
+        listView_fb_list.adapter = mAdapter
 
         mArrayList.clear()
         mAdapter.notifyDataSetChanged()
@@ -158,9 +158,9 @@ class DataFragment : Fragment() {
                     p.gas=gas
                     p.dust=dust
                     p.light=light
-                    mArrayList2.add(p)
+                    mArrayList.add(p)
                 }
-                mAdapter2.notifyDataSetChanged()
+                mAdapter.notifyDataSetChanged()
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
