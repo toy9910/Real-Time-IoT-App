@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.*
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.fragment_one_data.*
 import org.json.JSONException
@@ -40,12 +41,15 @@ class OneDataFragment : Fragment() {
     val PRIMARY_CHANNEL_ID = "primary_notification_channel"
     lateinit var mNotificationManager: NotificationManager
     val NOTIFICATION_ID = 0
+    var HI : Double = 0.0
     val TAG = "joljak"
 
     lateinit var firebaseFirestore: FirebaseFirestore
     lateinit var spinner: Spinner
-    lateinit var room_nm : String
     lateinit var room_no : String
+
+    lateinit var firebaseDatabase: FirebaseDatabase
+    lateinit var datbaseReference: DatabaseReference
 
     private lateinit var callback: OnBackPressedCallback
 
@@ -75,12 +79,18 @@ class OneDataFragment : Fragment() {
         notificationIntent.setAction("NOTI")
         val notificationPendingIntent = PendingIntent.getActivity(context,NOTIFICATION_ID,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT)
 
+        val GAS_VAL = one_gas.text.toString().toDouble()
+
         val notifyBuilder = NotificationCompat.Builder(context!!,PRIMARY_CHANNEL_ID)
             .setContentTitle("온도 이상 감지!")
             .setContentText("자세한 내용을 보려면 클릭하세요.")
             .setSmallIcon(R.drawable.ic_baseline_post_add_24)
             .setContentIntent(notificationPendingIntent)
             .setAutoCancel(true)
+        if(HI > 40.0)
+            notifyBuilder.setContentTitle("온도 이상 감지!")
+        if(GAS_VAL > 200.0)
+            notifyBuilder.setContentTitle("가스 이상 감지!")
         return notifyBuilder
     }
 
@@ -98,8 +108,10 @@ class OneDataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        createNotificationChannel()
+        createNotificationChannel()
         firebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        datbaseReference = firebaseDatabase.getReference("Rooms")
 
         spinner = one_spinner
         spinner.onItemSelectedListener = SpinnerListener()
@@ -120,11 +132,7 @@ class OneDataFragment : Fragment() {
                 //현재 어떤 방인지, 빛의 밝기를 데이터 보내는과정
                 val light = one_led.text.toString()
 
-                val ref = firebaseFirestore.collection("rooms").document(room_nm)
-                Log.d(TAG, "onStopTrackingTouch: $room_nm")
-                ref.update("light",light.toInt()).addOnCompleteListener {
-                    Log.d(TAG, "Snapshot successfully updated!!")
-                }
+                datbaseReference.child(room_no).child("light").setValue(light)
             }
         })
 
@@ -159,34 +167,32 @@ class OneDataFragment : Fragment() {
             Log.d(TAG, "onItemSelected: $pos2")
             room_no = pos2.toString()
 
-            val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object :
-                EventListener<QuerySnapshot> {
-                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                    if (error != null) {
-                        Log.d(TAG, "onEvent: Listen failed!")
-                        return
-                    }
-                    for (doc: QueryDocumentSnapshot in value!!) {
-                        val room_no = doc.get("roomNo").toString()
-                        if(room_no.toInt() == pos2) {
-                            room_nm = doc.id
-//                          var room_nm = doc.get("room_nm").toString()
-                            val temp = doc.get("temp").toString()
-                            val hum = doc.get("hum").toString()
-                            val gas = doc.get("gas").toString()
-                            val dust = doc.get("dust").toString()
-                            val light = doc.get("light").toString()
+            datbaseReference.orderByChild("room_no").equalTo(pos2.toString()).addValueEventListener(object :
+                ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
 
-                            one_temp.text = temp
-//                            if(temp.toDouble() > 50)
-//                                sendNotification()
-                            one_humidity.text = hum
-                            one_gas.text = gas
-                            one_dust.text = dust
-                            one_led.text = light
-                            seekBar.progress = light.toInt()
-                        }
-                    }
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("TT", "onDataChange: ${snapshot.child(room_no).child("temp").value}")
+                    var array = snapshot.child(room_no).child("temp").value.toString().split(".")
+                    one_temp?.text = array[0]
+                    array = snapshot.child(room_no).child("hum").value.toString().split(".")
+                    one_humidity?.text = array[0]
+
+                    val Tf = one_temp.text.toString().toDouble()
+                    val RH = one_humidity.text.toString().toDouble()
+                    HI = -42.3 + 2.0 * Tf + 10.1 * RH - 0.2*Tf*RH - ((6.8 / 1000 )*(Tf * Tf)) - ((5.4 / 100 )*(RH * RH)) + ((1.2 / 1000)*(Tf * Tf)*(RH)) + ((8.5 / 10000)*(Tf)*(RH * RH)) - ((1.9 / 1000000)*(Tf * Tf)*(RH * RH))
+                    if(HI > 40.0)
+                        sendNotification()
+                    array = snapshot.child(room_no).child("gas").value.toString().split(".")
+                    one_gas?.text = array[0]
+                    val GAS_VAL = one_gas.text.toString().toDouble()
+                    if(GAS_VAL > 200)
+                        sendNotification()
+                    array = snapshot.child(room_no).child("dust").value.toString().split(".")
+                    one_dust?.text = array[0]
+                    one_led?.text = snapshot.child(room_no).child("light").value.toString()
                 }
             })
         }
