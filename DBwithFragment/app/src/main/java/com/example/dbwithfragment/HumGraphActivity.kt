@@ -41,9 +41,7 @@ class HumGraphActivity : AppCompatActivity() {
         val room_no = intent.getStringExtra("room_no")
 
         val cal = Calendar.getInstance()
-        //cal.time = Date()
-        //val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-05-27 23:59:59")
-        //cal.time = date
+
         val format_start: DateFormat = SimpleDateFormat("yyyy-MM-dd 00:00:00")
         val format_end: DateFormat = SimpleDateFormat("yyyy-MM-dd 23:59:59")
 

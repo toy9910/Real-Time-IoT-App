@@ -40,6 +40,8 @@ class DataFragment : Fragment() {
     val TAG = "joljak"
 
     lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var firebaseDatabase: FirebaseDatabase
+    lateinit var databaseReference: DatabaseReference
 
     lateinit var mArrayList : ArrayList<RoomData>
     lateinit var mArrayList2 : ArrayList<RoomData>
@@ -65,52 +67,108 @@ class DataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        databaseReference = firebaseDatabase.getReference("Rooms")
+
         mArrayList = arrayListOf()
-        mArrayList2 = arrayListOf()
         mAdapter = RoomAdapter(mArrayList)
-        mAdapter2 = FbAdapter(mArrayList2)
 
         listView_fb_list.layoutManager = LinearLayoutManager(activity)
-        listView_fb_list.adapter = mAdapter2
+        listView_fb_list.adapter = mAdapter
 
         mArrayList.clear()
         mAdapter.notifyDataSetChanged()
 
-        mArrayList2.clear()
-        mAdapter2.notifyDataSetChanged()
-
         initDatabase()
 
         // FireStore 데이터 자동 업데이트
-        val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object : EventListener<QuerySnapshot> {
-                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                    if (error != null) {
-                        Log.d(TAG, "onEvent: Listen failed!")
-                        return
+//        val ref = firebaseFirestore.collection("rooms").addSnapshotListener(object : EventListener<QuerySnapshot> {
+//                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+//                    if (error != null) {
+//                        Log.d(TAG, "onEvent: Listen failed!")
+//                        return
+//                    }
+//                    mArrayList2.clear()
+//                    for (doc: QueryDocumentSnapshot in value!!) {
+//                        val room_no = doc.get("roomNo").toString()
+//                        val room_nm = doc.id
+////                        var room_nm = doc.get("room_nm").toString()
+//                        val temp = doc.get("temp").toString()
+//                        val hum = doc.get("hum").toString()
+//                        val gas = doc.get("gas").toString()
+//                        val dust = doc.get("dust").toString()
+//                        val light = doc.get("light").toString()
+//                        val p = RoomData()
+//                        p.room_no = room_no
+//                        p.room_nm = room_nm
+//                        p.temperature = temp
+//                        p.humidity = hum
+//                        p.gas = gas
+//                        p.dust = dust
+//                        p.light = light
+//                        mArrayList2.add(p)
+//                    }
+//                    mAdapter2.notifyDataSetChanged()
+//                }
+//            })
+
+        //realtime database 자동 업데이트
+        databaseReference.orderByChild("room_no").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                mArrayList.clear()
+                for(shot in snapshot.children) {
+                    var room_no = ""
+                    var room_nm = ""
+                    var temp = ""
+                    var hum = ""
+                    var gas = ""
+                    var dust = ""
+                    var light = ""
+                    for (shot2 in shot.children) {
+                        when(shot2.key) {
+                            "room_no" -> {
+                                room_no = shot2.value.toString()
+                            }
+                            "room_nm" -> {
+                                room_nm = shot2.value.toString()
+                            }
+                            "temp" -> {
+                                val array = shot2.value.toString().split(".")
+                                temp = array[0]
+                            }
+                            "hum" -> {
+                                val array = shot2.value.toString().split(".")
+                                hum = array[0]
+                            }
+                            "gas" -> {
+                                val array = shot2.value.toString().split(".")
+                                gas = array[0]
+                            }
+                            "dust" -> {
+                                val array = shot2.value.toString().split(".")
+                                dust = array[0]
+                            }
+                            "light" -> {
+                                light = shot2.value.toString()
+                            }
+                        }
                     }
-                    mArrayList2.clear()
-                    for (doc: QueryDocumentSnapshot in value!!) {
-                        val room_no = doc.get("roomNo").toString()
-                        val room_nm = doc.id
-//                        var room_nm = doc.get("room_nm").toString()
-                        val temp = doc.get("temp").toString()
-                        val hum = doc.get("hum").toString()
-                        val gas = doc.get("gas").toString()
-                        val dust = doc.get("dust").toString()
-                        val light = doc.get("light").toString()
-                        val p = RoomData()
-                        p.room_no = room_no
-                        p.room_nm = room_nm
-                        p.temperature = temp
-                        p.humidity = hum
-                        p.gas = gas
-                        p.dust = dust
-                        p.light = light
-                        mArrayList2.add(p)
-                    }
-                    mAdapter2.notifyDataSetChanged()
+                    val p = RoomData()
+                    p.room_no=room_no
+                    p.room_nm=room_nm
+                    p.temperature=temp
+                    p.humidity=hum
+                    p.gas=gas
+                    p.dust=dust
+                    p.light=light
+                    mArrayList.add(p)
                 }
-            })
+                mAdapter.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 
