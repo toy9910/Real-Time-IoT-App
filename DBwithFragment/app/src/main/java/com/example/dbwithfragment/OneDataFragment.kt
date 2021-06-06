@@ -87,9 +87,9 @@ class OneDataFragment : Fragment() {
             .setSmallIcon(R.drawable.ic_baseline_post_add_24)
             .setContentIntent(notificationPendingIntent)
             .setAutoCancel(true)
-        if(HI > 40.0)
-            notifyBuilder.setContentTitle("온도 이상 감지!")
-        if(GAS_VAL > 200.0)
+//        if(HI > 40.0)
+//            notifyBuilder.setContentTitle("온도 이상 감지!")
+        if(GAS_VAL > 350.0)
             notifyBuilder.setContentTitle("가스 이상 감지!")
         return notifyBuilder
     }
@@ -180,15 +180,15 @@ class OneDataFragment : Fragment() {
                     array = snapshot.child(room_no).child("hum").value.toString().split(".")
                     one_humidity?.text = array[0]
 
-                    val Tf = one_temp.text.toString().toDouble()
-                    val RH = one_humidity.text.toString().toDouble()
-                    HI = -42.3 + 2.0 * Tf + 10.1 * RH - 0.2*Tf*RH - ((6.8 / 1000 )*(Tf * Tf)) - ((5.4 / 100 )*(RH * RH)) + ((1.2 / 1000)*(Tf * Tf)*(RH)) + ((8.5 / 10000)*(Tf)*(RH * RH)) - ((1.9 / 1000000)*(Tf * Tf)*(RH * RH))
-                    if(HI > 40.0)
-                        sendNotification()
+//                    val Tf = one_temp.text.toString().toDouble()
+//                    val RH = one_humidity.text.toString().toDouble()
+//                    HI = -42.3 + 2.0 * Tf + 10.1 * RH - 0.2*Tf*RH - ((6.8 / 1000 )*(Tf * Tf)) - ((5.4 / 100 )*(RH * RH)) + ((1.2 / 1000)*(Tf * Tf)*(RH)) + ((8.5 / 10000)*(Tf)*(RH * RH)) - ((1.9 / 1000000)*(Tf * Tf)*(RH * RH))
+//                    if(HI > 40.0)
+//                        sendNotification()
                     array = snapshot.child(room_no).child("gas").value.toString().split(".")
                     one_gas?.text = array[0]
                     val GAS_VAL = one_gas.text.toString().toDouble()
-                    if(GAS_VAL > 200)
+                    if(GAS_VAL > 350)
                         sendNotification()
                     array = snapshot.child(room_no).child("dust").value.toString().split(".")
                     one_dust?.text = array[0]

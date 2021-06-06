@@ -130,8 +130,8 @@ class GasGraphActivity : AppCompatActivity() {
                 gasChart.apply {
                     description.text = ""
                     axisRight.isEnabled = false
-                    axisLeft.axisMaximum = 60f
-                    axisLeft.axisMinimum = 0f
+                    axisLeft.axisMaximum = 700f
+                    axisLeft.axisMinimum = 100f
                     legend.apply {
                         textSize = 15f
                         verticalAlignment = Legend.LegendVerticalAlignment.TOP

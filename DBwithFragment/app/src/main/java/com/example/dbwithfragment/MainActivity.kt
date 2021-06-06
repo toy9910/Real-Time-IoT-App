@@ -101,18 +101,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun initLayout() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setTitle("")
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
-
-        drawerToggle = ActionBarDrawerToggle(this,drawer_layout,toolbar,R.string.drawer_open,R.string.drawer_close)
-        drawer_layout.addDrawerListener(drawerToggle)
-        nv_main_navigation_root.setNavigationItemSelectedListener(this)
-
-        var actionBar = supportActionBar
-        actionBar?.hide()
-
         getSupportFragmentManager().beginTransaction()
             .replace(R.id.container, LoginFragment())
             .commit()

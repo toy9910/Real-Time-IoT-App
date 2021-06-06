@@ -25,7 +25,7 @@ class WebViewFragment :Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         webview_pycam.setWebViewClient(object : WebViewClient() {})
-        webview_pycam.loadUrl("http://toy9910.tistory.com")
+        webview_pycam.loadUrl("http://203.229.55.130:8000")
 
         layout_img_list.setOnClickListener {
             val intent = Intent(context,PycamImageActivity::class.java)
