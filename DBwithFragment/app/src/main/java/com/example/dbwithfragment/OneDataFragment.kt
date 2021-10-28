@@ -48,6 +48,12 @@ class OneDataFragment : Fragment() {
     lateinit var spinner: Spinner
     lateinit var room_no : String
 
+    lateinit var tmp_temp : String
+    lateinit var tmp_hum : String
+    lateinit var tmp_dust : String
+    lateinit var tmp_gas : String
+    lateinit var tmp_light : String
+
     lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var datbaseReference: DatabaseReference
 
@@ -175,8 +181,20 @@ class OneDataFragment : Fragment() {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     Log.d("TT", "onDataChange: ${snapshot.child(room_no).child("temp").value}")
-                    one_temp?.text = snapshot.child(room_no).child("temp").value.toString()
-                    one_humidity?.text = snapshot.child(room_no).child("hum").value.toString()
+                    if(snapshot.child(room_no).child("temp").value == null)
+                        one_temp?.text = tmp_temp
+                    else {
+                        tmp_temp = snapshot.child(room_no).child("temp").value.toString()
+                        one_temp?.text = tmp_temp
+                    }
+
+
+                    if(snapshot.child(room_no).child("hum").value == null)
+                        one_humidity?.text = tmp_hum
+                    else {
+                        tmp_hum = snapshot.child(room_no).child("hum").value.toString()
+                        one_humidity?.text = tmp_hum
+                    }
 
 //                    val Tf = one_temp.text.toString().toDouble()
 //                    val RH = one_humidity.text.toString().toDouble()
@@ -184,12 +202,28 @@ class OneDataFragment : Fragment() {
 //                    if(HI > 40.0)
 //                        sendNotification()
 
-                    one_gas?.text = snapshot.child(room_no).child("gas").value.toString()
-                    val GAS_VAL = one_gas.text.toString().toDouble()
+
+                    if(snapshot.child(room_no).child("gas").value == null)
+                        one_gas?.text = tmp_gas
+                    else {
+                        tmp_gas = snapshot.child(room_no).child("gas").value.toString()
+                        one_gas?.text = tmp_gas
+                    }
+                    val GAS_VAL = tmp_gas.toDouble()
                     if(GAS_VAL > 350)
                         sendNotification()
-                    one_dust?.text = snapshot.child(room_no).child("dust").value.toString()
-                    one_led?.text = snapshot.child(room_no).child("light").value.toString()
+                    if(snapshot.child(room_no).child("dust").value == null)
+                        one_dust?.text = tmp_dust
+                    else {
+                        tmp_dust = snapshot.child(room_no).child("dust").value.toString()
+                        one_dust?.text = tmp_dust
+                    }
+                    if(snapshot.child(room_no).child("light").value == null)
+                        one_led?.text = tmp_light
+                    else {
+                        tmp_light = snapshot.child(room_no).child("light").value.toString()
+                        one_led?.text = tmp_light
+                    }
                 }
             })
         }

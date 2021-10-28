@@ -6,6 +6,8 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.dbwithfragment.databinding.ActivityGasGraphBinding
+import com.example.dbwithfragment.databinding.ActivityHumGraphBinding
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -13,6 +15,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.android.synthetic.main.activity_dust_graph.*
 import kotlinx.android.synthetic.main.activity_gas_graph.*
+import kotlinx.android.synthetic.main.activity_hum_graph.*
 import kotlinx.android.synthetic.main.activity_temp_graph.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -30,12 +33,17 @@ class GasGraphActivity : AppCompatActivity() {
     val IP_ADDRESS = "3.36.237.233"
     val TAG = "joljak"
 
+    lateinit var binding : ActivityGasGraphBinding
+
     lateinit var mJsonString : String
     val dataVals = ArrayList<Entry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gas_graph)
+
+        binding = ActivityGasGraphBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val room_no = intent.getStringExtra("room_no")
 
@@ -77,6 +85,394 @@ class GasGraphActivity : AppCompatActivity() {
         val task = GetGasAvgData()
         task.execute("http://" + IP_ADDRESS + "/gas_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
             ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
+
+        binding.ivTmpGraph.setOnClickListener {
+            dataVals.clear()
+            val task2 = GetTempAvgData()
+            task2.execute("http://" + IP_ADDRESS + "/temp_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
+                ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
+        }
+
+        binding.ivGasGraph.setOnClickListener {
+            dataVals.clear()
+            val task2 = GetGasAvgData()
+            task2.execute("http://" + IP_ADDRESS + "/gas_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
+                ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
+        }
+
+        binding.ivHumGraph.setOnClickListener {
+            dataVals.clear()
+            val task2 = GetHumAvgData()
+            task2.execute("http://" + IP_ADDRESS + "/hum_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
+                ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
+        }
+
+        binding.ivDustGraph.setOnClickListener {
+            dataVals.clear()
+            val task2 = GetDustAvgData()
+            task2.execute("http://" + IP_ADDRESS + "/dust_graph_getjson.php",cur_date_start,cur_date_end,day1_start,day1_end
+                ,day2_start,day2_end,day3_start,day3_end,day4_start,day4_end,day5_start,day5_end,day6_start,day6_end,room_no)
+        }
+    }
+
+    inner class GetTempAvgData : AsyncTask<String, Void, String>() {
+        var progressDialog : ProgressDialog? = null
+        lateinit var errorString : String
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressDialog = ProgressDialog.show(this@GasGraphActivity,"Please Wait",null,true,true)
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+
+            progressDialog?.dismiss()
+
+            Log.d(TAG, "response - $result")
+
+            if(result == null)
+                Log.e(TAG,errorString)
+            else {
+                mJsonString = result
+                AddEntry()
+
+                val lineDataset = LineDataSet(dataVals, "온도")
+                lineDataset.setCircleColor(Color.GREEN)
+                lineDataset.circleRadius = 4f
+                lineDataset.lineWidth = 1.5f
+                lineDataset.color = Color.GREEN
+
+
+                val data = LineData(lineDataset)
+                data.setValueTextSize(10f)
+                tempChart.data = data
+                val customValueFormatter: CustomValueFormatter = CustomValueFormatter(tempChart)
+                tempChart.xAxis.setValueFormatter(customValueFormatter)
+
+
+                val xAxis = tempChart.xAxis
+                xAxis.apply {
+                    position = XAxis.XAxisPosition.BOTTOM
+                    textSize = 12f
+                    setDrawGridLines(false)
+                    setDrawAxisLine(true)
+                    granularity = 1f
+                    axisMaximum = 7f
+                    axisMinimum = 0f
+                    isGranularityEnabled = true
+                }
+
+
+                tempChart.apply {
+                    description.text = ""
+                    axisRight.isEnabled = false
+                    axisLeft.axisMaximum = 60f
+                    axisLeft.axisMinimum = 0f
+                    legend.apply {
+                        textSize = 15f
+                        verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                        horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+//                orientation = Legend.LegendOrientation.HORIZONTAL
+//                setDrawInside(false)
+                    }
+                    tempChart.invalidate()
+                }
+            }
+        }
+
+        override fun doInBackground(vararg params: String?): String? {
+            val serverURL = params[0]
+            val postParameters = "date1=" + params[1] + "&date2=" + params[2] + "&date3=" + params[3] + "&date4=" + params[4] +
+                    "&date5=" + params[5] + "&date6=" + params[6] + "&date7=" + params[7] + "&date8=" + params[8] +
+                    "&date9=" + params[9] + "&date10=" + params[10] + "&date11=" + params[11] + "&date12=" + params[12] +
+                    "&date13=" + params[13] + "&date14=" + params[14] + "&room_no=" + params[15]
+            Log.d(TAG, "doInBackground: $postParameters")
+
+            try {
+                val url = URL(serverURL)
+                val httpURLConnection = url.openConnection() as HttpURLConnection
+
+                httpURLConnection.readTimeout = 5000
+                httpURLConnection.connectTimeout = 5000
+                httpURLConnection.requestMethod = "POST"
+                httpURLConnection.doInput = true
+                httpURLConnection.connect()
+
+                val outputStream = httpURLConnection.outputStream
+                outputStream.write(postParameters?.toByteArray(Charset.defaultCharset()))
+                outputStream.flush()
+                outputStream.close()
+
+                val responseStatusCode = httpURLConnection.responseCode
+                Log.d(TAG, "response code - $responseStatusCode");
+
+                var inputStream : InputStream? = null
+                if(responseStatusCode == HttpURLConnection.HTTP_OK)
+                    inputStream = httpURLConnection.inputStream
+                else
+                    inputStream = httpURLConnection.errorStream
+
+                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                val sb = StringBuilder()
+                var line : String? = null
+
+                while(true) {
+                    line = bufferedReader.readLine()
+                    if(line != null)
+                        sb.append(line)
+                    else
+                        break
+                }
+                bufferedReader.close()
+                return sb.toString().trim()
+            } catch (e : Exception) {
+                Log.d(TAG, "GetData : Error ", e);
+                errorString = e.toString();
+                return null
+            }
+        }
+    }
+
+    inner class GetDustAvgData : AsyncTask<String, Void, String>() {
+        var progressDialog : ProgressDialog? = null
+        lateinit var errorString : String
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressDialog = ProgressDialog.show(this@GasGraphActivity,"Please Wait",null,true,true)
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+
+            progressDialog?.dismiss()
+
+            Log.d(TAG, "response - $result")
+
+            if(result == null)
+                Log.e(TAG,errorString)
+            else {
+                mJsonString = result
+                AddEntry()
+
+                val lineDataset = LineDataSet(dataVals, "먼지 농도")
+                lineDataset.setCircleColor(Color.GREEN)
+                lineDataset.circleRadius = 4f
+                lineDataset.lineWidth = 1.5f
+                lineDataset.color = Color.GREEN
+
+
+                val data = LineData(lineDataset)
+                data.setValueTextSize(10f)
+                dustChart.data = data
+                val customValueFormatter: CustomValueFormatter = CustomValueFormatter(dustChart)
+                dustChart.xAxis.setValueFormatter(customValueFormatter)
+
+
+                val xAxis = dustChart.xAxis
+                xAxis.apply {
+                    position = XAxis.XAxisPosition.BOTTOM
+                    textSize = 12f
+                    setDrawGridLines(false)
+                    setDrawAxisLine(true)
+                    granularity = 1f
+                    axisMaximum = 7f
+                    axisMinimum = 0f
+                    isGranularityEnabled = true
+                }
+
+
+                dustChart.apply {
+                    description.text = ""
+                    axisRight.isEnabled = false
+                    axisLeft.axisMaximum = 100f
+                    axisLeft.axisMinimum = 0f
+                    legend.apply {
+                        textSize = 15f
+                        verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                        horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+//                orientation = Legend.LegendOrientation.HORIZONTAL
+//                setDrawInside(false)
+                    }
+                    dustChart.invalidate()
+                }
+            }
+        }
+
+        override fun doInBackground(vararg params: String?): String? {
+            val serverURL = params[0]
+            val postParameters = "date1=" + params[1] + "&date2=" + params[2] + "&date3=" + params[3] + "&date4=" + params[4] +
+                    "&date5=" + params[5] + "&date6=" + params[6] + "&date7=" + params[7] + "&date8=" + params[8] +
+                    "&date9=" + params[9] + "&date10=" + params[10] + "&date11=" + params[11] + "&date12=" + params[12] +
+                    "&date13=" + params[13] + "&date14=" + params[14] + "&room_no=" + params[15]
+            Log.d(TAG, "doInBackground: $postParameters")
+
+            try {
+                val url = URL(serverURL)
+                val httpURLConnection = url.openConnection() as HttpURLConnection
+
+                httpURLConnection.readTimeout = 5000
+                httpURLConnection.connectTimeout = 5000
+                httpURLConnection.requestMethod = "POST"
+                httpURLConnection.doInput = true
+                httpURLConnection.connect()
+
+                val outputStream = httpURLConnection.outputStream
+                outputStream.write(postParameters?.toByteArray(Charset.defaultCharset()))
+                outputStream.flush()
+                outputStream.close()
+
+                val responseStatusCode = httpURLConnection.responseCode
+                Log.d(TAG, "response code - $responseStatusCode");
+
+                var inputStream : InputStream? = null
+                if(responseStatusCode == HttpURLConnection.HTTP_OK)
+                    inputStream = httpURLConnection.inputStream
+                else
+                    inputStream = httpURLConnection.errorStream
+
+                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                val sb = StringBuilder()
+                var line : String? = null
+
+                while(true) {
+                    line = bufferedReader.readLine()
+                    if(line != null)
+                        sb.append(line)
+                    else
+                        break
+                }
+                bufferedReader.close()
+                return sb.toString().trim()
+            } catch (e : Exception) {
+                Log.d(TAG, "GetData : Error ", e);
+                errorString = e.toString();
+                return null
+            }
+        }
+    }
+
+    inner class GetHumAvgData : AsyncTask<String, Void, String>() {
+        var progressDialog : ProgressDialog? = null
+        lateinit var errorString : String
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressDialog = ProgressDialog.show(this@GasGraphActivity,"Please Wait",null,true,true)
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+
+            progressDialog?.dismiss()
+
+            Log.d(TAG, "response - $result")
+
+            if(result == null)
+                Log.e(TAG,errorString)
+            else {
+                mJsonString = result
+                AddEntry()
+
+                val lineDataset = LineDataSet(dataVals, "습도")
+                lineDataset.setCircleColor(Color.GREEN)
+                lineDataset.circleRadius = 4f
+                lineDataset.lineWidth = 1.5f
+                lineDataset.color = Color.GREEN
+
+
+                val data = LineData(lineDataset)
+                data.setValueTextSize(10f)
+                humChart.data = data
+                val customValueFormatter: CustomValueFormatter = CustomValueFormatter(humChart)
+                humChart.xAxis.setValueFormatter(customValueFormatter)
+
+
+                val xAxis = humChart.xAxis
+                xAxis.apply {
+                    position = XAxis.XAxisPosition.BOTTOM
+                    textSize = 12f
+                    setDrawGridLines(false)
+                    setDrawAxisLine(true)
+                    granularity = 1f
+                    axisMaximum = 7f
+                    axisMinimum = 0f
+                    isGranularityEnabled = true
+                }
+
+
+                humChart.apply {
+                    description.text = ""
+                    axisRight.isEnabled = false
+                    axisLeft.axisMaximum = 100f
+                    axisLeft.axisMinimum = 0f
+                    legend.apply {
+                        textSize = 15f
+                        verticalAlignment = Legend.LegendVerticalAlignment.TOP
+                        horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+//                orientation = Legend.LegendOrientation.HORIZONTAL
+//                setDrawInside(false)
+                    }
+                    humChart.invalidate()
+                }
+            }
+        }
+
+        override fun doInBackground(vararg params: String?): String? {
+            val serverURL = params[0]
+            val postParameters = "date1=" + params[1] + "&date2=" + params[2] + "&date3=" + params[3] + "&date4=" + params[4] +
+                    "&date5=" + params[5] + "&date6=" + params[6] + "&date7=" + params[7] + "&date8=" + params[8] +
+                    "&date9=" + params[9] + "&date10=" + params[10] + "&date11=" + params[11] + "&date12=" + params[12] +
+                    "&date13=" + params[13] + "&date14=" + params[14] + "&room_no=" + params[15]
+            Log.d(TAG, "doInBackground: $postParameters")
+
+            try {
+                val url = URL(serverURL)
+                val httpURLConnection = url.openConnection() as HttpURLConnection
+
+                httpURLConnection.readTimeout = 5000
+                httpURLConnection.connectTimeout = 5000
+                httpURLConnection.requestMethod = "POST"
+                httpURLConnection.doInput = true
+                httpURLConnection.connect()
+
+                val outputStream = httpURLConnection.outputStream
+                outputStream.write(postParameters?.toByteArray(Charset.defaultCharset()))
+                outputStream.flush()
+                outputStream.close()
+
+                val responseStatusCode = httpURLConnection.responseCode
+                Log.d(TAG, "response code - $responseStatusCode");
+
+                var inputStream : InputStream? = null
+                if(responseStatusCode == HttpURLConnection.HTTP_OK)
+                    inputStream = httpURLConnection.inputStream
+                else
+                    inputStream = httpURLConnection.errorStream
+
+                val inputStreamReader = InputStreamReader(inputStream, Charset.defaultCharset())
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                val sb = StringBuilder()
+                var line : String? = null
+
+                while(true) {
+                    line = bufferedReader.readLine()
+                    if(line != null)
+                        sb.append(line)
+                    else
+                        break
+                }
+                bufferedReader.close()
+                return sb.toString().trim()
+            } catch (e : Exception) {
+                Log.d(TAG, "GetData : Error ", e);
+                errorString = e.toString();
+                return null
+            }
+        }
     }
 
     inner class GetGasAvgData : AsyncTask<String, Void, String>() {

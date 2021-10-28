@@ -60,7 +60,9 @@ class LoginFragment : Fragment() {
             val usr_id = user_id.text.toString()
             edit_password = user_pwd.text.toString()
             val task = GetData()
-            task.execute("http://" + IP_ADDRESS + "/user_getjson.php", usr_id)
+            //task.execute("http://" + IP_ADDRESS + "/user_getjson.php", usr_id)
+            var a = activity as MainActivity
+            a.replaceFragment(StartMenuFragment())
         }
     }
 
@@ -158,7 +160,6 @@ class LoginFragment : Fragment() {
             if(edit_password == pwd) {
                 isTrue = true
             }
-
 
             if(isTrue) {
                 var a = activity as MainActivity

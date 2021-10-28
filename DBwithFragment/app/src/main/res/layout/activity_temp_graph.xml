@@ -17,6 +17,7 @@
         android:weightSum="4"
         >
         <ImageView
+            android:id="@+id/iv_tmp_graph"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:src="@drawable/celsius_white"
@@ -24,6 +25,7 @@
             android:background="@color/one_data_red"
             />
         <ImageView
+            android:id="@+id/iv_hum_graph"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:src="@drawable/humidity1_white"
@@ -31,6 +33,7 @@
             android:background="@color/one_data_blue"
             />
         <ImageView
+            android:id="@+id/iv_gas_graph"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:src="@drawable/valve_white"
@@ -38,6 +41,7 @@
             android:background="@color/one_data_purple"
             />
         <ImageView
+            android:id="@+id/iv_dust_graph"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:src="@drawable/air_white"

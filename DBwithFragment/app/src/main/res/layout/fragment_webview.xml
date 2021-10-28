@@ -5,18 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="vertical">
 
     <WebView
         android:id="@+id/webview_pycam"
-        android:layout_width="250dp"
-        android:layout_height="250dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="500dp"/>
 
     <LinearLayout
         android:id="@+id/layout_img_list"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
         android:layout_height="45dp"
         android:background="@color/ex_blue"
         android:weightSum="8"
